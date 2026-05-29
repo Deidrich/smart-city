@@ -1,26 +1,28 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import BrandLogo from '../../components/BrandLogo';
+import HeroIcon from '../../components/HeroIcon';
 import './HomePage.css';
 
 const services = [
   {
-    icon: '01',
+    icon: 'government',
     title: 'Smart Governance',
     text: 'Layanan publik, laporan warga, dan panel admin untuk tata kelola kota yang responsif.',
   },
   {
-    icon: '02',
+    icon: 'truck',
     title: 'Smart Mobility',
     text: 'Pantau lalu lintas, transportasi, dan peta kota agar mobilitas warga lebih terarah.',
   },
   {
-    icon: '03',
+    icon: 'health',
     title: 'Smart Living',
     text: 'Akses fasilitas publik, zona aman, layanan kesehatan, pendidikan, dan informasi warga.',
   },
   {
-    icon: '04',
+    icon: 'sparkles',
     title: 'Smart Environment',
     text: 'Monitoring udara, air bersih, energi, dan sampah untuk lingkungan kota yang berkelanjutan.',
   },
@@ -52,25 +54,50 @@ const pillars = [
 
 export default function HomePage() {
   const { user } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <div className="home-page">
-      <header className="home-nav">
+      <header className={`home-nav ${isScrolled ? 'is-scrolled' : ''}`}>
         <div className="home-container home-nav-inner">
           <Link className="home-brand" to="/">
             <BrandLogo compact />
           </Link>
-          <nav className="home-nav-links">
-            <a href="#layanan">Layanan</a>
-            <a href="#pilar">Pilar Smart City</a>
-            <a href="#about">About Us</a>
-            <a href="#demo">Demo</a>
+
+          <nav className={`home-nav-links ${menuOpen ? 'open' : ''}`} aria-label="Navigasi utama">
+            <a href="#layanan" onClick={closeMenu}>Layanan</a>
+            <a href="#pilar" onClick={closeMenu}>Pilar Smart City</a>
+            <a href="#about" onClick={closeMenu}>About Us</a>
+            <a href="#demo" onClick={closeMenu}>Demo</a>
+          </nav>
+
+          <div className="home-nav-actions">
             {user ? (
               <Link to="/dashboard" className="home-button home-button-primary">Dashboard</Link>
             ) : (
               <Link to="/login" className="home-button home-button-primary">Login</Link>
             )}
-          </nav>
+            <button
+              className={`home-menu-toggle ${menuOpen ? 'open' : ''}`}
+              type="button"
+              aria-label="Buka menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(open => !open)}
+            >
+              <span></span>
+              <span></span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -101,11 +128,11 @@ export default function HomePage() {
             </div>
             <div className="hero-visual" aria-label="Ilustrasi fitur Smart City Medan">
               <div className="orbit-card orbit-card-main">
-                <span className="city-icon">▦</span>
+                <span className="city-icon"><HeroIcon name="city" /></span>
               </div>
-              <div className="orbit-card orbit-card-blue">⌁</div>
-              <div className="orbit-card orbit-card-gold">⚙</div>
-              <div className="orbit-card orbit-card-navy">⌂</div>
+              <div className="orbit-card orbit-card-blue"><HeroIcon name="cloud" /></div>
+              <div className="orbit-card orbit-card-gold"><HeroIcon name="bolt" /></div>
+              <div className="orbit-card orbit-card-navy"><HeroIcon name="home" /></div>
               <div className="orbit-ring"></div>
               <div className="hero-panel">
                 <span>Status Sistem</span>
@@ -126,7 +153,7 @@ export default function HomePage() {
             <div className="service-grid">
               {services.map(service => (
                 <article className="service-card" key={service.title}>
-                  <span className="service-icon">{service.icon}</span>
+                  <span className="service-icon"><HeroIcon name={service.icon} /></span>
                   <h3>{service.title}</h3>
                   <p>{service.text}</p>
                 </article>
@@ -196,7 +223,7 @@ export default function HomePage() {
         <div className="home-container footer-grid">
           <div>
             <Link className="footer-brand" to="/">
-              <BrandLogo compact />
+              <BrandLogo compact variant="white" />
             </Link>
             <p>
               Portal digital untuk monitoring kota, layanan warga, informasi publik,

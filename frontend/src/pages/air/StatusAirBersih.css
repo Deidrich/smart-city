@@ -2,7 +2,7 @@
 .air-error {
   text-align: center;
   padding: 60px 20px;
-  color: #C9A84C;
+  color: #E3B473;
   font-size: 16px;
 }
 
@@ -14,10 +14,10 @@
 }
 .air-tabs button {
   padding: 8px 20px;
-  border: 1.5px solid #C9A84C;
-  border-radius: 20px;
+  border: 1.5px solid #E3B473;
+  border-radius: var(--radius-pill);
   background: transparent;
-  color: #C9A84C;
+  color: #E3B473;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -25,13 +25,13 @@
 }
 .air-tabs button.active,
 .air-tabs button:hover {
-  background: #C9A84C;
-  color: #0A1628;
+  background: #E3B473;
+  color: #111E43;
 }
 
 .air-panel {
   background: #fff;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
 }
@@ -44,7 +44,7 @@
 .air-panel-head h2 {
   font-size: 17px;
   font-weight: 700;
-  color: #0A1628;
+  color: #111E43;
   margin: 0;
 }
 .air-panel-head span {
@@ -60,7 +60,7 @@
 }
 .air-stat-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 24px 20px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
   text-align: center;
@@ -71,7 +71,7 @@
 .air-stat-value {
   font-size: 28px;
   font-weight: 800;
-  color: #0A1628;
+  color: #111E43;
   margin: 8px 0 4px;
 }
 .air-stat-value small {
@@ -92,7 +92,7 @@
 }
 .air-badge {
   padding: 6px 16px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 600;
 }
@@ -107,9 +107,9 @@
 }
 .air-status-card {
   background: #F8FAFC;
-  border-radius: 10px;
+  border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid #E8ECF2;
+  border: 1px solid #EDF0F7;
 }
 .air-status-header {
   display: flex;
@@ -121,14 +121,14 @@
 }
 .air-status-header strong {
   font-size: 14px;
-  color: #0A1628;
+  color: #111E43;
 }
 .air-badge-status {
   font-size: 11px;
   font-weight: 700;
   color: #fff;
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
 }
 .air-status-body {
   padding: 12px 16px;
@@ -142,7 +142,7 @@
   font-size: 13px;
 }
 .air-status-body div span { color: #888; }
-.air-status-body div strong { color: #0A1628; }
+.air-status-body div strong { color: #111E43; }
 
 .air-table {
   width: 100%;
@@ -150,8 +150,8 @@
   font-size: 13px;
 }
 .air-table th {
-  background: #0A1628;
-  color: #C9A84C;
+  background: #111E43;
+  color: #E3B473;
   padding: 10px 14px;
   text-align: left;
   font-weight: 600;
@@ -169,7 +169,7 @@
   font-weight: 700;
   color: #fff;
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
   white-space: nowrap;
 }
 .air-update {
@@ -178,9 +178,9 @@
 }
 
 .air-tooltip {
-  background: #0A1628;
-  border: 1px solid #C9A84C;
-  border-radius: 8px;
+  background: #111E43;
+  border: 1px solid #E3B473;
+  border-radius: var(--radius-control);
   padding: 10px 14px;
   display: flex;
   flex-direction: column;
@@ -189,6 +189,6 @@
   color: #fff;
 }
 .air-tooltip strong {
-  color: #C9A84C;
+  color: #E3B473;
   margin-bottom: 4px;
 }

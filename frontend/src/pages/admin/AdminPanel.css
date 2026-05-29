@@ -3,20 +3,20 @@
 .admin-panel,
 .admin-stat {
   background: #FFFFFF;
-  border: 1px solid #E8ECF2;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(10, 22, 40, 0.08);
+  border: 1px solid #EDF0F7;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 12px rgba(17, 30, 67, 0.08);
 }
 
 .admin-loading,
 .admin-message {
   padding: 16px;
-  color: #0A1628;
+  color: #111E43;
 }
 
 .admin-message {
   margin-bottom: 16px;
-  border-color: rgba(201, 168, 76, 0.45);
+  border-color: rgba(227, 180, 115, 0.45);
   background: #FFFBF0;
 }
 
@@ -31,10 +31,10 @@
 .admin-form button,
 .admin-panel button,
 .admin-log-filter button {
-  border: 1px solid #D4AF7A;
+  border: 1px solid #F0C98A;
   background: #FFFFFF;
-  color: #0A1628;
-  border-radius: 8px;
+  color: #111E43;
+  border-radius: var(--radius-control);
   padding: 9px 12px;
   font-weight: 600;
 }
@@ -43,7 +43,7 @@
 .admin-tabs button:hover,
 .admin-form button,
 .admin-log-filter button {
-  background: #C9A84C;
+  background: #E3B473;
 }
 
 .admin-grid {
@@ -65,7 +65,7 @@
 }
 
 .admin-stat strong {
-  color: #0A1628;
+  color: #111E43;
   font-size: 28px;
 }
 
@@ -77,12 +77,13 @@
 }
 
 .admin-panel {
+  border-radius: var(--radius-lg);
   padding: 20px;
   overflow: hidden;
 }
 
 .admin-panel h2 {
-  color: #0A1628;
+  color: #111E43;
   font-size: 19px;
   margin-bottom: 14px;
 }
@@ -100,8 +101,8 @@
 .admin-log-filter input,
 .admin-log-filter select {
   width: 100%;
-  border: 1.5px solid #E8ECF2;
-  border-radius: 8px;
+  border: 1.5px solid #EDF0F7;
+  border-radius: var(--radius-control);
   padding: 10px 12px;
   color: #1A1A1A;
   font-family: var(--font);
@@ -124,7 +125,7 @@
 
 .admin-table th,
 .admin-table td {
-  border-bottom: 1px solid #E8ECF2;
+  border-bottom: 1px solid #EDF0F7;
   padding: 12px 10px;
   color: #1A1A1A;
   text-align: left;
@@ -132,7 +133,7 @@
 }
 
 .admin-table th {
-  color: #0A1628;
+  color: #111E43;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -144,18 +145,18 @@
 
 .admin-badge {
   display: inline-flex;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 10px;
-  background: #EEF3FA;
-  color: #0D1F3C;
+  background: #EAF1FF;
+  color: #162A5A;
   font-size: 12px;
   font-weight: 700;
   margin-bottom: 12px;
 }
 
 .admin-badge.active {
-  background: #FFF5DA;
-  color: #8A5A12;
+  background: #FFF8EC;
+  color: #A9742E;
 }
 
 .admin-badge.off {

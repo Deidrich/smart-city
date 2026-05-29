@@ -4,11 +4,12 @@ import {
   Tooltip, ResponsiveContainer, Legend, Cell
 } from 'recharts';
 import Layout from '../../components/Layout';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import './StatusAirBersih.css';
 
-const GOLD   = '#C9A84C';
-const BLUE   = '#2471A3';
+const GOLD   = '#E3B473';
+const BLUE   = '#043CB1';
 const RED    = '#C0392B';
 const GREEN  = '#1E8449';
 const ORANGE = '#CA6F1E';
@@ -108,31 +109,31 @@ export default function StatusAirBersih() {
         <div>
           <div className="air-stats-grid">
             <div className="air-stat-card">
-              <span className="air-stat-icon">👥</span>
+              <span className="air-stat-icon"><HeroIcon name="people" /></span>
               <div className="air-stat-value">{totalPelanggan.toLocaleString('id-ID')}</div>
               <div className="air-stat-label">Total Pelanggan Aktif</div>
             </div>
             <div className="air-stat-card">
-              <span className="air-stat-icon">💧</span>
+              <span className="air-stat-icon"><HeroIcon name="water" /></span>
               <div className="air-stat-value">{totalKapasitas.toLocaleString('id-ID')} <small>lps</small></div>
               <div className="air-stat-label">Total Kapasitas</div>
             </div>
             <div className="air-stat-card">
-              <span className="air-stat-icon">🚰</span>
+              <span className="air-stat-icon"><HeroIcon name="air" /></span>
               <div className="air-stat-value">{totalDistribusi.toLocaleString('id-ID')} <small>lps</small></div>
               <div className="air-stat-label">Total Distribusi</div>
             </div>
             <div className="air-stat-card">
-              <span className="air-stat-icon">📉</span>
+              <span className="air-stat-icon"><HeroIcon name="arrowDownRight" /></span>
               <div className="air-stat-value">{rataKehilangan}<small>%</small></div>
               <div className="air-stat-label">Rata-rata Kehilangan Air</div>
             </div>
           </div>
 
           <div className="air-badge-row">
-            <span className="air-badge normal">✅ Normal: {wilayahNormal} wilayah</span>
-            <span className="air-badge gangguan">🔴 Gangguan: {wilayahGangguan} wilayah</span>
-            <span className="air-badge pemeliharaan">🟠 Pemeliharaan: {wilayahPemeliharaan} wilayah</span>
+            <span className="air-badge normal"><HeroIcon name="check" /> Normal: {wilayahNormal} wilayah</span>
+            <span className="air-badge gangguan"><HeroIcon name="xCircle" /> Gangguan: {wilayahGangguan} wilayah</span>
+            <span className="air-badge pemeliharaan"><HeroIcon name="warning" /> Pemeliharaan: {wilayahPemeliharaan} wilayah</span>
           </div>
         </div>
       )}
@@ -146,7 +147,7 @@ export default function StatusAirBersih() {
           </div>
           <ResponsiveContainer width="100%" height={360}>
             <BarChart data={chartDistribusi} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
               <XAxis dataKey="wilayah" tick={{ fontSize: 12 }} />
               <YAxis />
               <Tooltip content={tooltipCustom} />
@@ -162,7 +163,7 @@ export default function StatusAirBersih() {
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartKehilangan} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
               <XAxis dataKey="wilayah" tick={{ fontSize: 12 }} />
               <YAxis unit="%" />
               <Tooltip content={tooltipCustom} />

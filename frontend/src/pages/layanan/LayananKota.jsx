@@ -6,14 +6,15 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import Layout from '../../components/Layout';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import './LayananKota.css';
 
-const NAVY = '#0A1628';
-const GOLD = '#C9A84C';
-const GOLD_LIGHT = '#D4AF7A';
-const BLUE = '#2471A3';
-const PURPLE = '#8E44AD';
+const NAVY = '#111E43';
+const GOLD = '#E3B473';
+const GOLD_LIGHT = '#F0C98A';
+const BLUE = '#043CB1';
+const PURPLE = '#7C5CFF';
 const RED = '#C0392B';
 const GREEN  = '#1E8449';
 const INK = '#1A1A1A';
@@ -170,8 +171,8 @@ export default function LayananKota() {
             {/* Multi File Upload */}
             <div style={{ marginBottom: 12 }}>
               <label style={{ display: 'block', marginBottom: 8, fontSize: 12, color: '#aaa' }}>Upload Foto/Video (maks 3)</label>
-              <label className="svc-primary" style={{ display: 'inline-block', cursor: 'pointer', padding: '10px 20px', borderRadius: 6 }}>
-                📁 Upload
+              <label className="svc-primary" style={{ display: 'inline-block', cursor: 'pointer', padding: '10px 20px', borderRadius: 16 }}>
+                <HeroIcon name="document" /> Upload
                 <input 
                   type="file" 
                   accept="image/*,video/*" 
@@ -198,17 +199,17 @@ export default function LayananKota() {
                   overflowY: 'auto',
                   padding: 8,
                   background: 'rgba(255,255,255,0.05)',
-                  borderRadius: 6
+                  borderRadius: 16
                 }}>
                   {floodForm.foto.map((file, idx) => (
                     <div key={idx} style={{ position: 'relative', width: 80, height: 80 }}>
                       {file.type.startsWith('video/') ? (
-                        <video style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />
+                        <video style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16 }} />
                       ) : (
                         <img 
                           src={URL.createObjectURL(file)} 
                           alt={file.name}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16 }}
                         />
                       )}
                       <button
@@ -229,7 +230,7 @@ export default function LayananKota() {
                           lineHeight: '18px'
                         }}
                       >
-                        ×
+                        <HeroIcon name="xCircle" />
                       </button>
                     </div>
                   ))}
@@ -258,24 +259,24 @@ export default function LayananKota() {
         <div>
           <div className="svc-renewable-stats">
             <div className="svc-renewable-stat-card">
-              <span>☀️</span>
+              <span><HeroIcon name="sun" /></span>
               <div className="svc-renewable-stat-value">{data.renewable.kontribusi[0].kapasitas_mw} MW</div>
               <div className="svc-renewable-stat-label">Kapasitas Surya</div>
             </div>
             <div className="svc-renewable-stat-card">
-              <span>💨</span>
+              <span><HeroIcon name="cloud" /></span>
               <div className="svc-renewable-stat-value">{data.renewable.kontribusi[1].kapasitas_mw} MW</div>
               <div className="svc-renewable-stat-label">Kapasitas Angin</div>
             </div>
             <div className="svc-renewable-stat-card">
-              <span>⚡</span>
+              <span><HeroIcon name="bolt" /></span>
               <div className="svc-renewable-stat-value">
                 {(data.renewable.kontribusi[0].produksi_mwh + data.renewable.kontribusi[1].produksi_mwh).toLocaleString('id-ID')} MWh
               </div>
               <div className="svc-renewable-stat-label">Total Produksi Bulan Ini</div>
             </div>
             <div className="svc-renewable-stat-card">
-              <span>🌿</span>
+              <span><HeroIcon name="sparkles" /></span>
               <div className="svc-renewable-stat-value">{data.renewable.emisi_hemat_ton.toLocaleString('id-ID')} ton</div>
               <div className="svc-renewable-stat-label">Emisi CO₂ Dihemat</div>
             </div>
@@ -324,7 +325,7 @@ export default function LayananKota() {
               <div className="svc-panel-head"><h2>Produksi per Zona</h2><span>Satuan: MWh</span></div>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={data.renewable.per_zona} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
                   <XAxis dataKey="zona" tick={{ fontSize: 11 }} />
                   <YAxis />
                   <Tooltip content={tooltip} />
@@ -340,7 +341,7 @@ export default function LayananKota() {
             <div className="svc-panel-head"><h2>Tren Produksi Bulanan</h2><span>Januari — Juni 2025 (MWh)</span></div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data.renewable.tren_bulanan} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
                 <XAxis dataKey="bulan" />
                 <YAxis />
                 <Tooltip content={tooltip} />
@@ -411,8 +412,8 @@ export default function LayananKota() {
             
             <div style={{ marginBottom: 12 }}>
               <label style={{ display: 'block', marginBottom: 8, fontSize: 12, color: '#aaa' }}>Upload Foto/Video (maks 3)</label>
-              <label className="svc-primary" style={{ display: 'inline-block', cursor: 'pointer', padding: '10px 20px', borderRadius: 6 }}>
-                📁 Upload
+              <label className="svc-primary" style={{ display: 'inline-block', cursor: 'pointer', padding: '10px 20px', borderRadius: 16 }}>
+                <HeroIcon name="document" /> Upload
                 <input 
                   type="file" 
                   accept="image/*,video/*" 
@@ -439,17 +440,17 @@ export default function LayananKota() {
                   overflowY: 'auto',
                   padding: 8,
                   background: 'rgba(255,255,255,0.05)',
-                  borderRadius: 6
+                  borderRadius: 16
                 }}>
                   {reportForm.foto.map((file, idx) => (
                     <div key={idx} style={{ position: 'relative', width: 80, height: 80 }}>
                       {file.type.startsWith('video/') ? (
-                        <video style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />
+                        <video style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16 }} />
                       ) : (
                         <img 
                           src={URL.createObjectURL(file)} 
                           alt={file.name}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16 }}
                         />
                       )}
                       <button
@@ -470,7 +471,7 @@ export default function LayananKota() {
                           lineHeight: '18px'
                         }}
                       >
-                        ×
+                        <HeroIcon name="xCircle" />
                       </button>
                     </div>
                   ))}
@@ -516,22 +517,22 @@ export default function LayananKota() {
           <div>
             <div className="svc-survei-stats">
               <div className="svc-survei-stat-card">
-                <span>📋</span>
+                <span><HeroIcon name="document" /></span>
                 <div className="svc-survei-stat-value">{filtered.length}</div>
                 <div className="svc-survei-stat-label">Jenis Layanan Disurvei</div>
               </div>
               <div className="svc-survei-stat-card">
-                <span>👥</span>
+                <span><HeroIcon name="people" /></span>
                 <div className="svc-survei-stat-value">{totalResponden.toLocaleString('id-ID')}</div>
                 <div className="svc-survei-stat-label">Total Responden</div>
               </div>
               <div className="svc-survei-stat-card">
-                <span>⭐</span>
+                <span><HeroIcon name="star" /></span>
                 <div className="svc-survei-stat-value">{rataSkor}</div>
                 <div className="svc-survei-stat-label">Rata-rata Skor</div>
               </div>
               <div className="svc-survei-stat-card">
-                <span>🏆</span>
+                <span><HeroIcon name="trophy" /></span>
                 <div className="svc-survei-stat-value">{skorTertinggi?.skor ?? '-'}</div>
                 <div className="svc-survei-stat-label">Skor Tertinggi · {skorTertinggi?.layanan ?? ''}</div>
               </div>
@@ -556,7 +557,7 @@ export default function LayananKota() {
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={filtered} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
                     <XAxis dataKey="layanan" tick={{ fontSize: 11 }} />
                     <YAxis domain={[0, 100]} />
                     <Tooltip content={tooltip} />
@@ -579,7 +580,7 @@ export default function LayananKota() {
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={filtered} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
                     <XAxis dataKey="layanan" tick={{ fontSize: 11 }} />
                     <YAxis />
                     <Tooltip content={tooltip} />
@@ -596,7 +597,7 @@ export default function LayananKota() {
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={trendData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
                   <XAxis dataKey="layanan" tick={{ fontSize: 11 }} />
                   <YAxis domain={[60, 100]} />
                   <Tooltip content={tooltip} />

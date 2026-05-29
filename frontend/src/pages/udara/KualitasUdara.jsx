@@ -8,10 +8,10 @@ import {
 import './Udara.css';
 
 const getAQIConfig = (aqi) => {
-  if (aqi <= 50)  return { label: 'Baik', color: '#2471A3', bg: '#EEF3FA', text: '#0D1F3C' };
+  if (aqi <= 50)  return { label: 'Baik', color: '#043CB1', bg: '#EAF1FF', text: '#162A5A' };
   if (aqi <= 100) return { label: 'Sedang', color: '#F39C12', bg: '#FEF9E7', text: '#7D6608' };
   if (aqi <= 150) return { label: 'Tidak Sehat', color: '#E74C3C', bg: '#FDEDEC', text: '#922B21' };
-  if (aqi <= 200) return { label: 'Sangat Tidak Sehat', color: '#9B59B6', bg: '#F5EEF8', text: '#6C3483' };
+  if (aqi <= 200) return { label: 'Sangat Tidak Sehat', color: '#9B59B6', bg: '#F2EFFF', text: '#6C3483' };
   return { label: 'Berbahaya', color: '#7B241C', bg: '#F9EBEA', text: '#7B241C' };
 };
 
@@ -85,7 +85,7 @@ export default function KualitasUdara() {
       <div className="aqi-scale">
         <span className="aqi-scale-label">Skala AQI:</span>
         {[
-          { label: '0-50 Baik', color: '#2471A3' },
+          { label: '0-50 Baik', color: '#043CB1' },
           { label: '51-100 Sedang', color: '#F39C12' },
           { label: '101-150 Tidak Sehat', color: '#E74C3C' },
           { label: '151-200 Sangat Tidak Sehat', color: '#9B59B6' },
@@ -121,7 +121,7 @@ export default function KualitasUdara() {
         </div>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={sorted} margin={{ top: 5, right: 10, left: 0, bottom: 60 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E8ECF2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
             <XAxis dataKey="kecamatan" tick={{ fontSize: 11, fill: '#718096' }} angle={-35} textAnchor="end" interval={0} />
             <YAxis tick={{ fontSize: 11, fill: '#718096' }} domain={[0, 200]} />
             <Tooltip
@@ -130,7 +130,7 @@ export default function KualitasUdara() {
                   const d = payload[0].payload;
                   const cfg = getAQIConfig(d.aqi);
                   return (
-                    <div style={{ background: '#0A1628', padding: '10px 14px', borderRadius: 8, border: `1px solid ${cfg.color}44` }}>
+                    <div style={{ background: '#111E43', padding: '10px 14px', borderRadius: 14, border: `1px solid ${cfg.color}44` }}>
                       <p style={{ color: '#fff', fontWeight: 600, marginBottom: 4 }}>{d.kecamatan}</p>
                       <p style={{ color: cfg.color, fontSize: 18, fontWeight: 700 }}>AQI: {d.aqi}</p>
                       <p style={{ color: '#aaa', fontSize: 12 }}>{cfg.label}</p>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "../../components/Layout";
+import HeroIcon from "../../components/HeroIcon";
 import api from "../../utils/api";
 import "./AdminPanel.css";
 
@@ -590,7 +591,7 @@ function ReportRow({ type, item, onUpdate }) {
 
   return (
     <tr>
-      <td>{isFlood ? "🌊 Banjir" : "👤 Warga"}</td>
+      <td><span className="icon-inline"><HeroIcon name={isFlood ? "water" : "profile"} /> {isFlood ? "Banjir" : "Warga"}</span></td>
       <td>{item.nama || item.pelapor || item.lokasi}</td>
       <td>{item.kategori || item.lokasi || "-"}</td>
       <td>
@@ -600,7 +601,7 @@ function ReportRow({ type, item, onUpdate }) {
             background: badgeColors[currentStatus] || "#6b7280",
             color: "#fff",
             padding: "2px 8px",
-            borderRadius: "12px",
+            borderRadius: "999px",
             fontSize: "12px",
           }}
         >

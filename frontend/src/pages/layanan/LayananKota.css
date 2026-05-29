@@ -3,19 +3,19 @@
 .svc-panel,
 .svc-card {
   background: #FFFFFF;
-  border: 1px solid #E8ECF2;
-  box-shadow: 0 2px 12px rgba(10, 22, 40, 0.08);
+  border: 1px solid #EDF0F7;
+  box-shadow: 0 2px 12px rgba(17, 30, 67, 0.08);
 }
 
 .svc-loading,
 .svc-message {
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 16px;
-  color: #0A1628;
+  color: #111E43;
 }
 
 .svc-message {
-  border-color: rgba(201, 168, 76, 0.45);
+  border-color: rgba(227, 180, 115, 0.45);
   background: #FFFBF0;
   margin-bottom: 16px;
 }
@@ -31,10 +31,10 @@
 .svc-vote-actions button,
 .svc-inline button,
 .svc-primary {
-  border: 1px solid #D4AF7A;
+  border: 1px solid #F0C98A;
   background: #FFFFFF;
-  color: #0A1628;
-  border-radius: 8px;
+  color: #111E43;
+  border-radius: var(--radius-control);
   padding: 10px 14px;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -45,12 +45,12 @@
 .svc-vote-actions button:hover,
 .svc-inline button,
 .svc-primary {
-  background: #C9A84C;
-  color: #0A1628;
+  background: #E3B473;
+  color: #111E43;
 }
 
 .svc-panel {
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 22px;
   overflow: hidden;
 }
@@ -65,7 +65,7 @@
 
 .svc-panel-head h2 {
   font-size: 20px;
-  color: #0A1628;
+  color: #111E43;
   line-height: 1.25;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .svc-card {
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -118,8 +118,8 @@
 .svc-form textarea,
 .svc-inline input {
   width: 100%;
-  border: 1.5px solid #E8ECF2;
-  border-radius: 8px;
+  border: 1.5px solid #EDF0F7;
+  border-radius: var(--radius-control);
   padding: 11px 12px;
   font-family: var(--font);
   color: #1A1A1A;
@@ -135,8 +135,8 @@
 .svc-form select:focus,
 .svc-form textarea:focus,
 .svc-inline input:focus {
-  border-color: #C9A84C;
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.16);
+  border-color: #E3B473;
+  box-shadow: 0 0 0 3px rgba(227, 180, 115, 0.16);
 }
 
 .svc-two {
@@ -147,9 +147,9 @@
 
 .svc-map {
   height: 430px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid #E8ECF2;
+  border: 1px solid #EDF0F7;
 }
 
 .svc-table {
@@ -159,31 +159,31 @@
 
 .svc-table th,
 .svc-table td {
-  border-bottom: 1px solid #E8ECF2;
+  border-bottom: 1px solid #EDF0F7;
   padding: 13px 10px;
   text-align: left;
   color: #1A1A1A;
 }
 
 .svc-table th {
-  color: #0A1628;
+  color: #111E43;
   font-size: 13px;
   text-transform: uppercase;
 }
 
 .svc-status {
   display: inline-flex;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 4px 10px;
   font-size: 12px;
   font-weight: 700;
   background: #F8EFE0;
-  color: #8A5A12;
+  color: #A9742E;
 }
 
 .svc-status.normal {
-  background: #EEF3FA;
-  color: #0D1F3C;
+  background: #EAF1FF;
+  color: #162A5A;
 }
 
 .svc-status.selesai {
@@ -199,8 +199,8 @@
 
 .svc-status.pemeliharaan,
 .svc-status.proses {
-  background: #FFF5DA;
-  color: #8A5A12;
+  background: #FFF8EC;
+  color: #A9742E;
 }
 
 .svc-vote-actions {
@@ -211,15 +211,15 @@
 
 .svc-result {
   height: 12px;
-  background: #EEF3FA;
-  border-radius: 999px;
+  background: #EAF1FF;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
 .svc-result span {
   display: block;
   height: 100%;
-  background: #C9A84C;
+  background: #E3B473;
 }
 
 .svc-thread-list {
@@ -230,11 +230,11 @@
 
 .svc-comment {
   padding: 10px 0;
-  border-bottom: 1px solid #E8ECF2;
+  border-bottom: 1px solid #EDF0F7;
 }
 
 .svc-comment strong {
-  color: #0A1628;
+  color: #111E43;
   margin-right: 8px;
 }
 
@@ -245,23 +245,23 @@
 }
 
 .svc-announcement {
-  border-left: 4px solid #C9A84C;
+  border-left: 4px solid #E3B473;
 }
 
 .svc-tooltip {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  background: #0A1628;
+  background: #111E43;
   color: #FFFFFF;
-  border: 1px solid rgba(201, 168, 76, 0.35);
-  border-radius: 8px;
+  border: 1px solid rgba(227, 180, 115, 0.35);
+  border-radius: var(--radius);
   padding: 10px 12px;
   font-size: 12px;
 }
 
 .svc-tooltip strong {
-  color: #D4AF7A;
+  color: #F0C98A;
 }
 
 @media (max-width: 920px) {
@@ -292,7 +292,7 @@
 }
 .svc-renewable-stat-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 22px 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
   text-align: center;
@@ -303,7 +303,7 @@
 .svc-renewable-stat-value {
   font-size: 22px;
   font-weight: 800;
-  color: #0A1628;
+  color: #111E43;
   margin: 8px 0 4px;
 }
 .svc-renewable-stat-label {
@@ -339,22 +339,22 @@
 .svc-renewable-progress-row strong {
   width: 40px;
   text-align: right;
-  color: #0A1628;
+  color: #111E43;
 }
 .svc-renewable-bar-bg {
   flex: 1;
   height: 14px;
   background: #F0F0F0;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 .svc-renewable-bar-fill {
   height: 100%;
-  border-radius: 8px;
+  border-radius: var(--radius);
   transition: width 0.6s ease;
 }
-.svc-renewable-bar-fill.target    { background: #2471A3; }
-.svc-renewable-bar-fill.realisasi { background: #C9A84C; }
+.svc-renewable-bar-fill.target    { background: #043CB1; }
+.svc-renewable-bar-fill.realisasi { background: #E3B473; }
 
 .svc-survei-stats {
   display: grid;
@@ -364,7 +364,7 @@
 }
 .svc-survei-stat-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 22px 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
   text-align: center;
@@ -375,7 +375,7 @@
 .svc-survei-stat-value {
   font-size: 26px;
   font-weight: 800;
-  color: #0A1628;
+  color: #111E43;
   margin: 8px 0 4px;
 }
 .svc-survei-stat-label {
@@ -396,10 +396,10 @@
 }
 .svc-survei-filter button {
   padding: 6px 18px;
-  border: 1.5px solid #C9A84C;
-  border-radius: 20px;
+  border: 1.5px solid #E3B473;
+  border-radius: var(--radius-pill);
   background: transparent;
-  color: #C9A84C;
+  color: #E3B473;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -407,14 +407,14 @@
 }
 .svc-survei-filter button.active,
 .svc-survei-filter button:hover {
-  background: #C9A84C;
-  color: #0A1628;
+  background: #E3B473;
+  color: #111E43;
 }
 .svc-survei-badge {
   font-size: 11px;
   font-weight: 700;
   color: #fff;
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   white-space: nowrap;
 }

@@ -16,7 +16,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
 }
 
 .aqi-summary-row {
@@ -75,7 +75,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .aqi-number {
@@ -134,7 +134,7 @@
 
 .sort-btn {
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--light-gray);
   background: var(--off-white);
   font-size: 12px;

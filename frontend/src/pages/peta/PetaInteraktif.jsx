@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { MapContainer, TileLayer, Marker, Popup, LayerGroup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Layout from '../../components/Layout';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import './Peta.css';
 
@@ -14,16 +16,17 @@ L.Icon.Default.mergeOptions({
 });
 
 const ICONS = {
-  'Rumah Sakit': { emoji: '🏥', color: '#e74c3c' },
-  'Sekolah':     { emoji: '🏫', color: '#2471A3' },
-  'Taman':       { emoji: '⛲', color: '#D4AF7A' },
-  'Kantor Pemerintah': { emoji: '🏛️', color: '#8E44AD' },
-  'Pasar':       { emoji: '🛒', color: '#E67E22' },
-  'Masjid':      { emoji: '🕌', color: '#C9A84C' },
+  'Rumah Sakit': { icon: 'health', color: '#e74c3c' },
+  'Sekolah':     { icon: 'school', color: '#043CB1' },
+  'Taman':       { icon: 'park', color: '#F0C98A' },
+  'Kantor Pemerintah': { icon: 'government', color: '#7C5CFF' },
+  'Pasar':       { icon: 'banknotes', color: '#E67E22' },
+  'Masjid':      { icon: 'building', color: '#E3B473' },
 };
 
 const createCustomIcon = (jenis) => {
-  const cfg = ICONS[jenis] || { emoji: '📍', color: '#C9A84C' };
+  const cfg = ICONS[jenis] || { icon: 'mapPin', color: '#E3B473' };
+  const iconMarkup = renderToStaticMarkup(<HeroIcon name={cfg.icon} style={{ width: 18, height: 18 }} />);
   return L.divIcon({
     html: `<div style="
       background:${cfg.color};
@@ -31,7 +34,8 @@ const createCustomIcon = (jenis) => {
       transform:rotate(-45deg);border:3px solid white;
       box-shadow:0 2px 8px rgba(0,0,0,0.3);
       display:flex;align-items:center;justify-content:center;
-    "><span style="transform:rotate(45deg);font-size:16px;display:block;text-align:center;line-height:30px;">${cfg.emoji}</span></div>`,
+      color:white;
+    "><span style="transform:rotate(45deg);display:flex;align-items:center;justify-content:center;">${iconMarkup}</span></div>`,
     className: '',
     iconSize: [36, 36],
     iconAnchor: [18, 36],
@@ -67,7 +71,7 @@ export default function PetaInteraktif() {
               onClick={() => setFilter(opt)}
               className={`peta-filter-btn ${filter === opt ? 'active' : ''}`}
             >
-              {opt !== 'Semua' && ICONS[opt]?.emoji + ' '}
+              {opt !== 'Semua' && <HeroIcon name={ICONS[opt]?.icon} />}
               {opt}
             </button>
           ))}
@@ -78,7 +82,7 @@ export default function PetaInteraktif() {
         <div className="peta-legend">
           {Object.entries(ICONS).map(([jenis, cfg]) => (
             <div key={jenis} className="legend-item">
-              <span className="legend-dot" style={{ background: cfg.color }}>{cfg.emoji}</span>
+              <span className="legend-dot" style={{ background: cfg.color }}><HeroIcon name={cfg.icon} /></span>
               <span>{jenis}</span>
             </div>
           ))}
@@ -90,7 +94,7 @@ export default function PetaInteraktif() {
             <MapContainer
               center={[3.5896, 98.6739]}
               zoom={13}
-              style={{ height: '100%', width: '100%', borderRadius: 12 }}
+              style={{ height: '100%', width: '100%', borderRadius: 22 }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -106,7 +110,7 @@ export default function PetaInteraktif() {
                     <Popup maxWidth={260}>
                       <div className="popup-content">
                         <div className="popup-header">
-                          <span className="popup-emoji">{ICONS[f.jenis]?.emoji}</span>
+                          <span className="popup-emoji"><HeroIcon name={ICONS[f.jenis]?.icon || 'mapPin'} /></span>
                           <div>
                             <div className="popup-nama">{f.nama}</div>
                             <span className="popup-jenis" style={{ background: ICONS[f.jenis]?.color + '22', color: ICONS[f.jenis]?.color }}>
@@ -115,10 +119,10 @@ export default function PetaInteraktif() {
                           </div>
                         </div>
                         <div className="popup-body">
-                          {f.alamat && <p>📍 {f.alamat}</p>}
-                          {f.kecamatan && <p>🏘️ {f.kecamatan}</p>}
-                          {f.telepon && <p>📞 {f.telepon}</p>}
-                          {f.jam_buka && <p>🕐 {f.jam_buka}</p>}
+                          {f.alamat && <p><HeroIcon name="mapPin" /> {f.alamat}</p>}
+                          {f.kecamatan && <p><HeroIcon name="city" /> {f.kecamatan}</p>}
+                          {f.telepon && <p><HeroIcon name="phone" /> {f.telepon}</p>}
+                          {f.jam_buka && <p><HeroIcon name="clock" /> {f.jam_buka}</p>}
                           {f.deskripsi && <p className="popup-desc">{f.deskripsi}</p>}
                         </div>
                       </div>
@@ -128,7 +132,7 @@ export default function PetaInteraktif() {
               </LayerGroup>
             </MapContainer>
           )}
-          {loading && <div className="map-loading">⏳ Memuat peta...</div>}
+          {loading && <div className="map-loading"><span className="icon-inline"><HeroIcon name="arrowPath" /> Memuat peta...</span></div>}
         </div>
       </div>
     </Layout>

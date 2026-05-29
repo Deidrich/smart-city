@@ -11,7 +11,7 @@
   flex-wrap: wrap;
   background: var(--white);
   padding: 14px 20px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   border: 1px solid var(--light-gray);
 }
@@ -25,7 +25,7 @@
 
 .peta-filter-btn {
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--light-gray);
   background: var(--off-white);
   font-size: 13px;
@@ -53,7 +53,7 @@
   color: var(--text-light);
   background: var(--light-gray);
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
 }
 
 .peta-legend {
@@ -62,7 +62,7 @@
   flex-wrap: wrap;
   background: var(--white);
   padding: 10px 20px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   border: 1px solid var(--light-gray);
 }
@@ -88,7 +88,7 @@
 
 .map-container {
   height: 540px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--light-gray);
@@ -134,7 +134,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
 }
 
 .popup-body p {
@@ -150,6 +150,6 @@
   margin-top: 6px !important;
   font-style: italic;
   color: #718096 !important;
-  border-top: 1px solid #E8ECF2;
+  border-top: 1px solid #EDF0F7;
   padding-top: 6px !important;
 }

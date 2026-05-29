@@ -67,7 +67,7 @@
 
 .trf-filter-btn {
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--light-gray);
   background: transparent;
   font-size: 12px;
@@ -125,7 +125,7 @@
 .status-badge {
   display: inline-block;
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -155,7 +155,7 @@
 
 .traffic-map {
   height: 380px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--light-gray);
 }

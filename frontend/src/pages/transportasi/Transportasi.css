@@ -37,7 +37,7 @@
 
 .transport-filter-btn {
   padding: 5px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--light-gray);
   background: transparent;
   font-size: 12px;
@@ -88,7 +88,7 @@
 .route-card.active {
   border-color: var(--gold);
   background: var(--white);
-  box-shadow: 0 2px 10px rgba(201, 168, 76, 0.2);
+  box-shadow: 0 2px 10px rgba(227, 180, 115, 0.2);
 }
 
 .route-card.inactive {
@@ -107,14 +107,14 @@
   font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-control);
 }
 
 .route-jenis-badge {
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
 }
 
 .route-inactive-badge {
@@ -122,7 +122,7 @@
   background: #F8D7DA;
   color: #721C24;
   padding: 2px 6px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   margin-left: auto;
 }
 
@@ -195,11 +195,11 @@
   font-size: 12px;
   font-weight: 600;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 
-.detail-status.aktif    { background: #EEF3FA; color: #0D1F3C; }
+.detail-status.aktif    { background: #EAF1FF; color: #162A5A; }
 .detail-status.nonaktif { background: #FDEDEC; color: #922B21; }
 
 .detail-info-grid {
@@ -276,7 +276,7 @@
 }
 
 .timeline-item.first .timeline-dot { background: var(--navy-dark); box-shadow: 0 0 0 2px var(--navy-dark); }
-.timeline-item.last .timeline-dot  { background: #2471A3; box-shadow: 0 0 0 2px #2471A3; }
+.timeline-item.last .timeline-dot  { background: #043CB1; box-shadow: 0 0 0 2px #043CB1; }
 
 .timeline-line {
   position: absolute;
@@ -322,7 +322,7 @@
   background: var(--navy-dark);
   color: var(--gold);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   font-weight: 600;
 }
 
@@ -340,5 +340,5 @@
   font-size: 11px;
   font-weight: 600;
   padding: 2px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BrandLogo from '../../components/BrandLogo';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import './auth.css';
 
@@ -50,7 +51,7 @@ export default function ForgotPassword() {
     <div className="auth-page">
       <div className="auth-left">
         <div className="auth-brand">
-          <BrandLogo className="auth-brand-logo" />
+          <BrandLogo className="auth-brand-logo" variant="white" />
           <p>Portal Digital Warga Kota Medan</p>
         </div>
       </div>
@@ -82,7 +83,7 @@ export default function ForgotPassword() {
             <div className="form-group">
               <label>Pertanyaan Keamanan</label>
               <div style={{ padding: '10px 14px', background: 'var(--off-white)',
-                borderRadius: 'var(--radius)', fontSize: 14, color: 'var(--text-mid)',
+                borderRadius: 'var(--radius-control)', fontSize: 14, color: 'var(--text-mid)',
                 border: '1.5px solid var(--light-gray)' }}>
                 {question}
               </div>
@@ -104,7 +105,7 @@ export default function ForgotPassword() {
         )}
 
         <div className="auth-footer">
-          <Link to="/login">← Kembali ke Login</Link>
+          <Link to="/login"><HeroIcon name="arrowLeft" /> Kembali ke Login</Link>
         </div>
       </div>
     </div>

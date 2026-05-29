@@ -4,6 +4,7 @@
     Tooltip, Legend, ResponsiveContainer, BarChart, Bar
     } from "recharts";
     import Layout from '../../components/Layout';
+    import HeroIcon from '../../components/HeroIcon';
     import api from "../../utils/api";
     import "./Energi.css";
 
@@ -35,7 +36,7 @@
             {
             <div className="energi-container">
             <div className="energi-header">
-                <h1>⚡ Monitor Konsumsi Energi</h1>
+                <h1><HeroIcon name="energy" /> Monitor Konsumsi Energi</h1>
                 <p>Data konsumsi energi kota per bulan dalam satuan GWh</p>
             </div>
 
@@ -58,20 +59,20 @@
                 <h2>Grafik Konsumsi Energi Bulanan</h2>
                 <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff22" />
-                    <XAxis dataKey="bulan" stroke="#aaaaaa" />
-                    <YAxis stroke="#aaaaaa" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
+                    <XAxis dataKey="bulan" stroke="#9AA2B6" />
+                    <YAxis stroke="#9AA2B6" />
                     <Tooltip
-                    contentStyle={{ background: "#0D1F3C", border: "1px solid #C9A84C" }}
-                    labelStyle={{ color: "#C9A84C" }}
+                    contentStyle={{ background: "#111E43", border: "1px solid #E3B473", borderRadius: 14 }}
+                    labelStyle={{ color: "#E3B473" }}
                     />
                     <Legend />
                     <Line
                     type="monotone"
                     dataKey="energi_gwh"
-                    stroke="#C9A84C"
-                    strokeWidth={2}
-                    dot={{ fill: "#C9A84C" }}
+                    stroke="#043CB1"
+                    strokeWidth={3}
+                    dot={{ fill: "#043CB1" }}
                     name="Energi (GWh)"
                     />
                 </LineChart>
@@ -82,14 +83,14 @@
                 <h2>Perbandingan Konsumsi Per Bulan</h2>
                 <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff22" />
-                    <XAxis dataKey="bulan" stroke="#aaaaaa" />
-                    <YAxis stroke="#aaaaaa" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EDF0F7" />
+                    <XAxis dataKey="bulan" stroke="#9AA2B6" />
+                    <YAxis stroke="#9AA2B6" />
                     <Tooltip
-                    contentStyle={{ background: "#0D1F3C", border: "1px solid #C9A84C" }}
-                    labelStyle={{ color: "#C9A84C" }}
+                    contentStyle={{ background: "#111E43", border: "1px solid #E3B473", borderRadius: 14 }}
+                    labelStyle={{ color: "#E3B473" }}
                     />
-                    <Bar dataKey="energi_gwh" fill="#C9A84C" name="Energi (GWh)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="energi_gwh" fill="#E3B473" name="Energi (GWh)" radius={[8, 8, 0, 0]} />
                 </BarChart>
                 </ResponsiveContainer>
             </div>

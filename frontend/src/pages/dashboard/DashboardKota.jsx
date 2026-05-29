@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
@@ -16,12 +17,14 @@ const StatCard = ({ icon, label, value, unit, sub, color, trend = 'up' }) => (
   <div className="stat-card">
     <div className="stat-head">
       <div className="stat-label">{label}</div>
-      <div className="stat-icon" style={{ background: color + '18', color }}>{icon}</div>
+      <div className="stat-icon" style={{ background: color + '18', color }}>
+        <HeroIcon name={icon} />
+      </div>
     </div>
     <div className="stat-value">{value}<span className="stat-unit">{unit}</span></div>
     {sub && (
       <div className={`stat-sub ${trend === 'down' ? 'down' : ''}`}>
-        <span>{trend === 'down' ? '↘' : '↗'}</span>
+        <HeroIcon name={trend === 'down' ? 'arrowDownRight' : 'arrowUpRight'} />
         {sub}
       </div>
     )}
@@ -31,7 +34,7 @@ const StatCard = ({ icon, label, value, unit, sub, color, trend = 'up' }) => (
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
     return (
-      <div style={{ background: NAVY, padding: '10px 14px', borderRadius: 8, border: `1px solid ${GOLD}44` }}>
+      <div style={{ background: NAVY, padding: '10px 14px', borderRadius: 14, border: `1px solid ${GOLD}44` }}>
         <p style={{ color: GOLD, fontWeight: 600, marginBottom: 6, fontSize: 13 }}>{label}</p>
         {payload.map(p => (
           <p key={p.name} style={{ color: '#fff', fontSize: 12 }}>
@@ -78,10 +81,10 @@ export default function DashboardKota() {
   return (
     <Layout title="Dashboard Kota" subtitle="Statistik & Monitoring Smart City Medan">
       <div className="stats-grid">
-        <StatCard icon="UR" label="Total Warga" value={(summary?.populasi || 0).toLocaleString('id-ID')} unit=" jiwa" sub="8.5% naik dari periode lalu" color={BLUE} />
-        <StatCard icon="KP" label="Kepadatan" value={(summary?.kepadatan || 0).toLocaleString('id-ID')} unit=" /km²" sub="1.3% naik dari pekan lalu" color={GOLD} />
-        <StatCard icon="EN" label="Total Energi" value={(summary?.energi_gwh || 0).toFixed(1)} unit=" GWh" sub="4.3% turun dari kemarin" color="#27c98b" trend="down" />
-        <StatCard icon="AQ" label="AQI Rata-rata" value={(summary?.aqi_rata || 0).toFixed(0)} unit=" AQI" sub="1.8% naik dari kemarin" color="#ff8b8b" />
+        <StatCard icon="people" label="Total Warga" value={(summary?.populasi || 0).toLocaleString('id-ID')} unit=" jiwa" sub="8.5% naik dari periode lalu" color={BLUE} />
+        <StatCard icon="map" label="Kepadatan" value={(summary?.kepadatan || 0).toLocaleString('id-ID')} unit=" /km²" sub="1.3% naik dari pekan lalu" color={GOLD} />
+        <StatCard icon="energy" label="Total Energi" value={(summary?.energi_gwh || 0).toFixed(1)} unit=" GWh" sub="4.3% turun dari kemarin" color="#27c98b" trend="down" />
+        <StatCard icon="cloud" label="AQI Rata-rata" value={(summary?.aqi_rata || 0).toFixed(0)} unit=" AQI" sub="1.8% naik dari kemarin" color="#ff8b8b" />
       </div>
 
       {overview && (

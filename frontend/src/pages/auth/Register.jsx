@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BrandLogo from '../../components/BrandLogo';
+import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
 import './auth.css';
 
@@ -49,7 +50,7 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-left">
         <div className="auth-brand">
-          <BrandLogo className="auth-brand-logo" />
+          <BrandLogo className="auth-brand-logo" variant="white" />
           <p>Portal Digital Warga Kota Medan</p>
         </div>
       </div>
@@ -82,7 +83,7 @@ export default function Register() {
                 value={form.password} onChange={handleChange} required />
               <button type="button" className="password-toggle"
                 onClick={() => setShowPass(!showPass)}>
-                {showPass ? '🙈' : '👁️'}
+                <HeroIcon name={showPass ? 'eyeSlash' : 'eye'} />
               </button>
             </div>
           </div>

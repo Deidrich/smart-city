@@ -64,6 +64,26 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const revealItems = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!revealItems.length) return undefined;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -12% 0px',
+      threshold: 0.15,
+    });
+
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -104,7 +124,7 @@ export default function HomePage() {
       <main>
         <section className="home-hero">
           <div className="home-container hero-grid">
-            <div className="hero-copy">
+            <div className="hero-copy" data-reveal="fade-up">
               <span className="hero-badge">Transformasi Digital Medan</span>
               <h1>Membangun <span>Kota Pintar</span> untuk Warga Medan</h1>
               <p>
@@ -126,7 +146,7 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="hero-visual" aria-label="Ilustrasi fitur Smart City Medan">
+            <div className="hero-visual" aria-label="Ilustrasi fitur Smart City Medan" data-reveal="zoom-in">
               <div className="orbit-card orbit-card-main">
                 <span className="city-icon"><HeroIcon name="city" /></span>
               </div>
@@ -146,13 +166,13 @@ export default function HomePage() {
 
         <section id="layanan" className="home-section">
           <div className="home-container">
-            <div className="section-heading">
+            <div className="section-heading" data-reveal="fade-up">
               <span>Layanan Utama</span>
               <h2>Solusi digital untuk warga dan pemerintah kota</h2>
             </div>
             <div className="service-grid">
-              {services.map(service => (
-                <article className="service-card" key={service.title}>
+              {services.map((service, index) => (
+                <article className="service-card" key={service.title} data-reveal="fade-up" style={{ '--reveal-delay': `${index * 70}ms` }}>
                   <span className="service-icon"><HeroIcon name={service.icon} /></span>
                   <h3>{service.title}</h3>
                   <p>{service.text}</p>
@@ -164,7 +184,7 @@ export default function HomePage() {
 
         <section id="pilar" className="feature-band">
           <div className="home-container feature-grid">
-            <div>
+            <div data-reveal="fade-up">
               <span className="section-kicker">Enam Pilar Utama</span>
               <h2>Fondasi Smart City yang terintegrasi dan berkelanjutan</h2>
               <p>
@@ -173,14 +193,18 @@ export default function HomePage() {
               </p>
             </div>
             <div className="feature-list">
-              {pillars.map(item => <span key={item}>{item}</span>)}
+              {pillars.map((item, index) => (
+                <span key={item} data-reveal="fade-up" style={{ '--reveal-delay': `${index * 55}ms` }}>
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="about" className="home-section about-section">
           <div className="home-container about-grid">
-            <div>
+            <div data-reveal="fade-up">
               <span className="section-kicker">About Us</span>
               <h2>Dibangun sebagai portal layanan kota digital yang modern.</h2>
               <p>
@@ -193,7 +217,7 @@ export default function HomePage() {
                 kebijakan, dan pengelolaan layanan publik berbasis web.
               </p>
             </div>
-            <div className="about-card">
+            <div className="about-card" data-reveal="slide-left">
               <h3>Tim Pengembang</h3>
               <ul>
                 <li>William Wiryawan</li>
@@ -206,7 +230,7 @@ export default function HomePage() {
         </section>
 
         <section id="demo" className="home-section demo-section">
-          <div className="home-container demo-card">
+          <div className="home-container demo-card" data-reveal="zoom-in">
             <div>
               <span>Siap Demo</span>
               <h2>Masuk untuk mencoba layanan Smart City Medan.</h2>

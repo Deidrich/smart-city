@@ -10,8 +10,19 @@ const {
 
 const ok = (res, data) => res.json({ success: true, data });
 const fail = (res, err) => res.status(500).json({ success: false, message: err.message });
+const uniqueBy = (rows, getKey) => {
+  const seen = new Set();
+  return rows.filter((row) => {
+    const key = getKey(row);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
 
-const seedIfEmpty = async () => {
+let seedPromise;
+
+const seed = async () => {
   if (await HospitalCapacity.count()) return;
 
   await HospitalCapacity.bulkCreate([
@@ -62,6 +73,15 @@ const seedIfEmpty = async () => {
   ]);
 };
 
+const seedIfEmpty = async () => {
+  if (!seedPromise) {
+    seedPromise = seed().finally(() => {
+      seedPromise = null;
+    });
+  }
+  return seedPromise;
+};
+
 exports.seedIfEmpty = seedIfEmpty;
 
 exports.overview = async (req, res) => {
@@ -76,7 +96,15 @@ exports.overview = async (req, res) => {
       LocalJob.findAll({ order: [['deadline', 'ASC']] }),
       UmkmBusiness.findAll({ order: [['kategori', 'ASC'], ['nama', 'ASC']] }),
     ]);
-    ok(res, { hospitals, cctv, alerts, health, education, jobs, umkm });
+    ok(res, {
+      hospitals: uniqueBy(hospitals, item => item.nama),
+      cctv: uniqueBy(cctv, item => item.nama),
+      alerts: uniqueBy(alerts, item => item.judul),
+      health: uniqueBy(health, item => item.periode),
+      education: uniqueBy(education, item => item.nama),
+      jobs: uniqueBy(jobs, item => `${item.posisi}-${item.perusahaan}`),
+      umkm: uniqueBy(umkm, item => item.nama),
+    });
   } catch (err) { fail(res, err); }
 };
 

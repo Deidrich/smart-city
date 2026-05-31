@@ -16,6 +16,31 @@ const NAVY = '#111E43';
 const BLUE = '#043CB1';
 const RED = '#C0392B';
 const PURPLE = '#7C5CFF';
+const ATCS_STREAM_URL = 'https://atcsdishub.medan.go.id/stream';
+const ATCS_FEATURED_CAMERA_URL = `${ATCS_STREAM_URL}/L1RADENSALEHBALAIKOTA/`;
+const OFFICIAL_CCTV_CAMERAS = [
+  {
+    nama: 'RADEN SALEH - BALAI KOTA',
+    lokasi: 'Simpang Lapangan Merdeka',
+    poster: 'https://atcsdishub.medan.go.id/poster/RADENSALEHBALAIKOTA_1_1346.jpg',
+    stream: ATCS_FEATURED_CAMERA_URL,
+  },
+  {
+    nama: 'AHMAD YANI - PULAU PINANG',
+    lokasi: 'Simpang Lonsum',
+    poster: 'https://atcsdishub.medan.go.id/poster/AHMADYANIPULAUPINANG_2_1346.jpg',
+  },
+  {
+    nama: 'KESAWAN - PALANG MERAH',
+    lokasi: 'Simpang Kesawan',
+    poster: 'https://atcsdishub.medan.go.id/poster/KESAWANPALANGMERAH_3_1346.jpg',
+  },
+  {
+    nama: 'KATAMSO - ANI IDRUS',
+    lokasi: 'Simpang Waspada',
+    poster: 'https://atcsdishub.medan.go.id/poster/KATAMSOANIIDRUS_4_1346.jpg',
+  },
+];
 
 const tabs = [
   ['rs', 'Rumah Sakit'],
@@ -132,22 +157,38 @@ export default function LayananPublik() {
       )}
 
       {active === 'cctv' && (
-        <section className="pub-split">
-          <div className="pub-panel">
-            <div className="pub-head"><h2>Peta Titik CCTV & Zona Aman</h2><span>Sebaran kamera pengawasan kota</span></div>
-            <div className="pub-list">
-              {data.cctv.map(item => (
-                <article className="pub-card" key={item.id}>
-                  <strong>{item.nama}</strong>
-                  <p>{item.lokasi}</p>
-                  <span>{item.zona} · {item.status}</span>
-                </article>
-              ))}
+        <section className="pub-panel pub-cctv-panel">
+          <div className="pub-cctv-head">
+            <div>
+              <span className="pub-cctv-label">Sumber resmi Dishub Kota Medan</span>
+              <h2>CCTV ATCS Kota Medan</h2>
+              <p>Cuplikan kamera dan akses livestream resmi untuk pemantauan lalu lintas Kota Medan.</p>
             </div>
+            <a className="pub-cctv-link" href={ATCS_STREAM_URL} target="_blank" rel="noreferrer">
+              Lihat Semua CCTV
+            </a>
           </div>
-          <div className="pub-panel">
-            <MapBox points={data.cctv} type="cctv" showZones />
+
+          <div className="pub-cctv-grid">
+            {OFFICIAL_CCTV_CAMERAS.map(camera => (
+              <article className="pub-cctv-card" key={camera.nama}>
+                <img src={camera.poster} alt={`Cuplikan CCTV ${camera.nama}`} loading="lazy" />
+                <div className="pub-cctv-card-body">
+                  <span className="pub-cctv-live">ATCS Medan</span>
+                  <h3>{camera.nama}</h3>
+                  <p>{camera.lokasi}</p>
+                  <a href={camera.stream || ATCS_STREAM_URL} target="_blank" rel="noreferrer">
+                    {camera.stream ? 'Buka Livestream' : 'Pilih Kamera di ATCS'}
+                  </a>
+                </div>
+              </article>
+            ))}
           </div>
+
+          <p className="pub-cctv-note">
+            Livestream dibuka melalui <a href={ATCS_STREAM_URL} target="_blank" rel="noreferrer">ATCS Dishub Kota Medan</a>.
+            Situs resmi membatasi penayangan video di domain lain, sehingga player dibuka pada halaman ATCS agar siaran tetap berjalan dengan benar.
+          </p>
         </section>
       )}
 

@@ -20,6 +20,9 @@ router.delete('/announcements/:id', ctrl.deleteAnnouncement);
 
 router.patch('/alerts/:id', ctrl.toggleAlert);
 
+router.get('/jobs', ctrl.getJobs);
+router.patch('/jobs/:id/status', ctrl.updateJobStatus);
+
 router.post('/master/:type', ctrl.createMaster);
 router.put('/master/:type/:id', ctrl.updateMaster);
 router.delete('/master/:type/:id', ctrl.deleteMaster);

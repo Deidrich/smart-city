@@ -8,6 +8,7 @@ const sections = [
   ["ringkasan", "Ringkasan"],
   ["kebijakan", "Kebijakan"],
   ["laporan", "Laporan"],
+  ["jobs", "Moderasi Lowongan"],
   ["pengumuman", "Pengumuman"],
   ["master", "Master Data"],
   ["alert", "Alert"],
@@ -124,6 +125,7 @@ export default function AdminPanel() {
   const [summary, setSummary] = useState(null);
   const [data, setData] = useState(null);
   const [logs, setLogs] = useState([]);
+  const [adminJobs, setAdminJobs] = useState([]);
   const [message, setMessage] = useState("");
   const [policyForm, setPolicyForm] = useState(emptyPolicy);
   const [announcementForm, setAnnouncementForm] = useState(emptyAnnouncement);
@@ -132,12 +134,14 @@ export default function AdminPanel() {
   const [logFilter, setLogFilter] = useState({ aksi: "", start: "", end: "" });
 
   const load = async () => {
-    const [summaryRes, bootRes] = await Promise.all([
+    const [summaryRes, bootRes, jobsRes] = await Promise.all([
       api.get("/admin/summary"),
       api.get("/admin/bootstrap"),
+      api.get("/admin/jobs").catch(() => ({ data: { data: [] } })),
     ]);
     setSummary(summaryRes.data.data);
     setData(bootRes.data.data);
+    setAdminJobs(jobsRes.data.data || []);
   };
 
   const loadLogs = async () => {
@@ -146,6 +150,15 @@ export default function AdminPanel() {
     );
     const res = await api.get(`/admin/logs?${params.toString()}`);
     setLogs(res.data.data);
+  };
+
+  const handleJobStatusChange = async (id, status) => {
+    try {
+      await api.patch(`/admin/jobs/${id}/status`, { status });
+      await flash(`Status lowongan berhasil diubah menjadi ${status}.`);
+    } catch (err) {
+      setMessage("Gagal mengubah status lowongan.");
+    }
   };
 
   useEffect(() => {
@@ -345,6 +358,53 @@ export default function AdminPanel() {
                 onUpdate={updateReport}
               />
             ))}
+          </AdminTable>
+        </section>
+      )}
+
+      {active === "jobs" && (
+        <section className="admin-panel">
+          <h2>Moderasi Lowongan Kerja Warga</h2>
+          <AdminTable
+            headers={["Posisi", "Perusahaan", "Lokasi & Tipe", "Laporan", "Status", "Tindakan"]}
+          >
+            {adminJobs.length === 0 ? (
+              <tr><td colSpan={6} style={{ textAlign: "center", padding: "20px" }}>Tidak ada data lowongan kerja.</td></tr>
+            ) : (
+              adminJobs.map((job) => (
+                <tr key={job.id}>
+                  <td><strong>{job.posisi}</strong><br /><small>{job.kategori || 'Umum'}</small></td>
+                  <td>{job.perusahaan}</td>
+                  <td>{job.lokasi} ({job.tipe})</td>
+                  <td>{job.laporan_count || 0} Laporan</td>
+                  <td>
+                    <span
+                      className="admin-badge"
+                      style={{
+                        background: job.status === "Approved" ? "#10b981" : job.status === "Pending" ? "#f59e0b" : "#ef4444",
+                        color: "#fff",
+                        padding: "4px 10px",
+                        borderRadius: "999px",
+                        fontSize: "12px",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {job.status}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      {job.status !== "Approved" && (
+                        <button type="button" style={{ background: "#10b981", color: "#fff", border: 0, padding: "6px 12px", borderRadius: "6px", cursor: "pointer" }} onClick={() => handleJobStatusChange(job.id, "Approved")}>Setujui</button>
+                      )}
+                      {job.status !== "Rejected" && (
+                        <button type="button" style={{ background: "#ef4444", color: "#fff", border: 0, padding: "6px 12px", borderRadius: "6px", cursor: "pointer" }} onClick={() => handleJobStatusChange(job.id, "Rejected")}>Tolak</button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </AdminTable>
         </section>
       )}

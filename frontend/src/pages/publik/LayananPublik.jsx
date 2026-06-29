@@ -5,6 +5,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
+import toast from 'react-hot-toast';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
@@ -69,6 +70,27 @@ export default function LayananPublik() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
 
+  // Job Filters & Modal State
+  const [jobSearch, setJobSearch] = useState('');
+  const [jobCategory, setJobCategory] = useState('Semua');
+  const [jobType, setJobType] = useState('Semua');
+  const [showJobModal, setShowJobModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [submittingJob, setSubmittingJob] = useState(false);
+
+  const [newJob, setNewJob] = useState({
+    posisi: '',
+    perusahaan: '',
+    kategori: 'Teknologi',
+    lokasi: 'Medan Petisah',
+    tipe: 'Full-time',
+    gaji: 'Rp 4 - 6 Juta',
+    deskripsi: '',
+    persyaratan: '',
+    kontak: '',
+    deadline: '2026-09-30',
+  });
+
   const load = async () => {
     const res = await api.get('/public-services');
     setData(res.data.data);
@@ -77,6 +99,58 @@ export default function LayananPublik() {
   useEffect(() => {
     load().catch(() => setMessage('Gagal memuat data layanan publik.')).finally(() => setLoading(false));
   }, []);
+
+  const filteredJobs = useMemo(() => {
+    if (!data?.jobs) return [];
+    return data.jobs.filter(job => {
+      const matchSearch = jobSearch === '' || 
+        job.posisi.toLowerCase().includes(jobSearch.toLowerCase()) || 
+        job.perusahaan.toLowerCase().includes(jobSearch.toLowerCase());
+      const matchCat = jobCategory === 'Semua' || job.kategori === jobCategory;
+      const matchType = jobType === 'Semua' || job.tipe === jobType;
+      return matchSearch && matchCat && matchType;
+    });
+  }, [data, jobSearch, jobCategory, jobType]);
+
+  const handleCreateJob = async (e) => {
+    e.preventDefault();
+    if (!newJob.posisi || !newJob.perusahaan || !newJob.lokasi || !newJob.kontak) {
+      toast.error('Mohon lengkapi field wajib.');
+      return;
+    }
+    setSubmittingJob(true);
+    try {
+      await api.post('/public-services/jobs', newJob);
+      toast.success('Lowongan berhasil dikirim dan menunggu verifikasi admin!');
+      setShowJobModal(false);
+      setNewJob({
+        posisi: '',
+        perusahaan: '',
+        kategori: 'Teknologi',
+        lokasi: 'Medan Petisah',
+        tipe: 'Full-time',
+        gaji: 'Rp 4 - 6 Juta',
+        deskripsi: '',
+        persyaratan: '',
+        kontak: '',
+        deadline: '2026-09-30',
+      });
+      load();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal mengirim lowongan.');
+    } finally {
+      setSubmittingJob(false);
+    }
+  };
+
+  const handleReportJob = async (jobId) => {
+    try {
+      await api.post(`/public-services/jobs/${jobId}/report`);
+      toast.success('Laporan berhasil dikirim ke Admin Kota.');
+    } catch (err) {
+      toast.error('Gagal mengirim laporan.');
+    }
+  };
 
   const healthByPeriod = useMemo(() => {
     if (!data?.health) return [];
@@ -119,7 +193,7 @@ export default function LayananPublik() {
   }
 
   return (
-    <Layout title="Layanan Publik" subtitle="Kesehatan, keamanan, pendidikan, kerja, dan UMKM">
+    <Layout title="Portal Layanan Publik Kota Medan" subtitle="Integrasi data fasilitas, cctv, pendidikan, dan peluang karir lokal.">
       {activeAlerts.map(alert => (
         <div className={`pub-alert ${alert.tingkat.toLowerCase()}`} key={alert.id}>
           <strong>{alert.tingkat}: {alert.judul}</strong>
@@ -130,7 +204,7 @@ export default function LayananPublik() {
 
       <div className="pub-tabs">
         {tabs.map(([id, label]) => (
-          <button key={id} className={active === id ? 'active' : ''} onClick={() => setActive(id)}>{label}</button>
+          <button key={id} type="button" className={active === id ? 'active' : ''} onClick={() => setActive(id)}>{label}</button>
         ))}
       </div>
 
@@ -244,16 +318,160 @@ export default function LayananPublik() {
       )}
 
       {active === 'jobs' && (
-        <section className="pub-grid">
-          {data.jobs.map(job => (
-            <article className="pub-card pub-job" key={job.id}>
-              <span>{job.lokasi} · {job.tipe}</span>
-              <strong>{job.posisi}</strong>
-              <p>{job.perusahaan}</p>
-              <p>{job.deskripsi}</p>
-              <div className="pub-job-foot"><span>{job.gaji}</span><span>Deadline {job.deadline}</span></div>
-            </article>
-          ))}
+        <section className="pub-job-section">
+          <div className="pub-job-bar">
+            <div className="pub-job-filters">
+              <input 
+                type="text" 
+                placeholder="Cari posisi atau perusahaan..." 
+                value={jobSearch}
+                onChange={e => setJobSearch(e.target.value)}
+                className="pub-job-input"
+              />
+              <select value={jobCategory} onChange={e => setJobCategory(e.target.value)} className="pub-job-select">
+                <option value="Semua">Semua Kategori</option>
+                <option value="Teknologi">Teknologi</option>
+                <option value="Kesehatan">Kesehatan</option>
+                <option value="UMKM">UMKM</option>
+                <option value="Jasa">Jasa</option>
+                <option value="Umum">Umum</option>
+              </select>
+              <select value={jobType} onChange={e => setJobType(e.target.value)} className="pub-job-select">
+                <option value="Semua">Semua Tipe</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Freelance">Freelance</option>
+              </select>
+            </div>
+            <button type="button" className="pub-primary pub-add-job-btn" onClick={() => setShowJobModal(true)}>
+              + Pasang Lowongan
+            </button>
+          </div>
+
+          <div className="pub-grid">
+            {filteredJobs.length === 0 ? (
+              <div className="pub-no-jobs">Tidak ada lowongan pekerjaan yang cocok dengan pencarian Anda.</div>
+            ) : (
+              filteredJobs.map(job => (
+                <article className="pub-card pub-job" key={job.id}>
+                  <div className="pub-job-head">
+                    <span className="pub-job-badge">{job.kategori || 'Umum'}</span>
+                    <span className="pub-job-type">{job.lokasi} · {job.tipe}</span>
+                  </div>
+                  <strong>{job.posisi}</strong>
+                  <p className="pub-job-company">{job.perusahaan}</p>
+                  <p className="pub-job-desc">{job.deskripsi}</p>
+                  <div className="pub-job-foot">
+                    <span className="pub-job-salary">{job.gaji}</span>
+                    <div className="pub-job-actions">
+                      <button type="button" className="pub-btn-detail" onClick={() => setSelectedJob(job)}>Detail</button>
+                      <button type="button" className="pub-btn-report" title="Laporkan Lowongan" onClick={() => handleReportJob(job.id)}>Lapor</button>
+                    </div>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+
+          {selectedJob && (
+            <div className="pub-modal-overlay" onClick={() => setSelectedJob(null)}>
+              <div className="pub-modal-content" onClick={e => e.stopPropagation()}>
+                <div className="pub-modal-head">
+                  <h2>{selectedJob.posisi}</h2>
+                  <button type="button" className="pub-modal-close" onClick={() => setSelectedJob(null)}>&times;</button>
+                </div>
+                <div className="pub-modal-body">
+                  <p><strong>Perusahaan:</strong> {selectedJob.perusahaan}</p>
+                  <p><strong>Kategori:</strong> {selectedJob.kategori || 'Umum'}</p>
+                  <p><strong>Lokasi:</strong> {selectedJob.lokasi}</p>
+                  <p><strong>Tipe Pekerjaan:</strong> {selectedJob.tipe}</p>
+                  <p><strong>Kisaran Gaji:</strong> {selectedJob.gaji}</p>
+                  <p><strong>Batas Waktu:</strong> {selectedJob.deadline || 'Tidak ditentukan'}</p>
+                  <hr />
+                  <h4>Deskripsi Pekerjaan:</h4>
+                  <p>{selectedJob.deskripsi || 'Tidak ada deskripsi rinci.'}</p>
+                  <h4>Kualifikasi & Persyaratan:</h4>
+                  <p>{selectedJob.persyaratan || 'Sesuai standar kualifikasi perusahaan.'}</p>
+                  <hr />
+                  <div className="pub-contact-box">
+                    <strong>Kontak & Pendaftaran Resmi:</strong>
+                    <p>{selectedJob.kontak || 'Hubungi instansi terkait.'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showJobModal && (
+            <div className="pub-modal-overlay" onClick={() => setShowJobModal(false)}>
+              <div className="pub-modal-content wide" onClick={e => e.stopPropagation()}>
+                <div className="pub-modal-head">
+                  <h2>Pasang Lowongan Pekerjaan Baru</h2>
+                  <button type="button" className="pub-modal-close" onClick={() => setShowJobModal(false)}>&times;</button>
+                </div>
+                <form onSubmit={handleCreateJob} className="pub-job-form">
+                  <div className="pub-form-grid">
+                    <label>
+                      <span>Posisi Pekerjaan *</span>
+                      <input type="text" required placeholder="Contoh: Admin Kasir / Staff IT" value={newJob.posisi} onChange={e => setNewJob({...newJob, posisi: e.target.value})} />
+                    </label>
+                    <label>
+                      <span>Nama Perusahaan / UMKM *</span>
+                      <input type="text" required placeholder="Contoh: PT Medan Sejahtera / Toko Berkah" value={newJob.perusahaan} onChange={e => setNewJob({...newJob, perusahaan: e.target.value})} />
+                    </label>
+                    <label>
+                      <span>Kategori *</span>
+                      <select value={newJob.kategori} onChange={e => setNewJob({...newJob, kategori: e.target.value})}>
+                        <option value="Teknologi">Teknologi</option>
+                        <option value="Kesehatan">Kesehatan</option>
+                        <option value="UMKM">UMKM</option>
+                        <option value="Jasa">Jasa</option>
+                        <option value="Umum">Umum</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Lokasi Kecamatan *</span>
+                      <input type="text" required placeholder="Contoh: Medan Petisah" value={newJob.lokasi} onChange={e => setNewJob({...newJob, lokasi: e.target.value})} />
+                    </label>
+                    <label>
+                      <span>Tipe Pekerjaan</span>
+                      <select value={newJob.tipe} onChange={e => setNewJob({...newJob, tipe: e.target.value})}>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Freelance">Freelance</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Kisaran Gaji</span>
+                      <input type="text" placeholder="Contoh: Rp 3 - 5 Juta" value={newJob.gaji} onChange={e => setNewJob({...newJob, gaji: e.target.value})} />
+                    </label>
+                    <label>
+                      <span>Kontak / Cara Melamar *</span>
+                      <input type="text" required placeholder="Email / WA / Link Pendaftaran" value={newJob.kontak} onChange={e => setNewJob({...newJob, kontak: e.target.value})} />
+                    </label>
+                    <label>
+                      <span>Batas Waktu (Deadline)</span>
+                      <input type="date" value={newJob.deadline} onChange={e => setNewJob({...newJob, deadline: e.target.value})} />
+                    </label>
+                  </div>
+                  <label className="full">
+                    <span>Deskripsi Pekerjaan</span>
+                    <textarea rows={3} placeholder="Jelaskan tanggung jawab utama pekerjaan..." value={newJob.deskripsi} onChange={e => setNewJob({...newJob, deskripsi: e.target.value})}></textarea>
+                  </label>
+                  <label className="full">
+                    <span>Kualifikasi & Persyaratan</span>
+                    <textarea rows={3} placeholder="Tuliskan syarat pendidikan, pengalaman, dan keahlian..." value={newJob.persyaratan} onChange={e => setNewJob({...newJob, persyaratan: e.target.value})}></textarea>
+                  </label>
+                  <div className="pub-form-actions">
+                    <button type="button" onClick={() => setShowJobModal(false)}>Batal</button>
+                    <button type="submit" className="pub-primary" disabled={submittingJob}>{submittingJob ? 'Mengirim...' : 'Kirim Lowongan'}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </section>
       )}
 

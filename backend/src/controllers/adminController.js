@@ -15,6 +15,7 @@ const {
   EmergencyAlert,
   EducationInstitution,
   UmkmBusiness,
+  LocalJob,
 } = require("../models/PublicService");
 const Log = require("../models/Log");
 const cityServices = require("./cityServiceController");
@@ -345,6 +346,31 @@ exports.logs = async (req, res) => {
     }
     const logs = await Log.find(query).sort({ createdAt: -1 }).limit(200);
     ok(res, logs);
+  } catch (err) {
+    fail(res, err);
+  }
+};
+
+exports.getJobs = async (req, res) => {
+  try {
+    const jobs = await LocalJob.findAll({ order: [['createdAt', 'DESC']] });
+    ok(res, jobs);
+  } catch (err) {
+    fail(res, err);
+  }
+};
+
+exports.updateJobStatus = async (req, res) => {
+  try {
+    const job = await LocalJob.findByPk(req.params.id);
+    if (!job) return res.status(404).json({ success: false, message: "Lowongan tidak ditemukan." });
+    const { status } = req.body;
+    if (!['Pending', 'Approved', 'Rejected'].includes(status)) {
+      return res.status(400).json({ success: false, message: "Status tidak valid." });
+    }
+    await job.update({ status, laporan_count: status === 'Approved' ? 0 : job.laporan_count });
+    await writeLog(req, "MODERASI_LOWONGAN", `Ubah status lowongan #${job.id} (${job.posisi}) menjadi ${status}`);
+    ok(res, job);
   } catch (err) {
     fail(res, err);
   }

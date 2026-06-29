@@ -53,13 +53,19 @@ const EducationInstitution = sequelize.define('EducationInstitution', {
 
 const LocalJob = sequelize.define('LocalJob', {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  user_id: { type: DataTypes.INTEGER },
   posisi: { type: DataTypes.STRING(160), allowNull: false },
   perusahaan: { type: DataTypes.STRING(160), allowNull: false },
+  kategori: { type: DataTypes.STRING(100), defaultValue: 'Umum' },
   lokasi: { type: DataTypes.STRING(140), allowNull: false },
   tipe: { type: DataTypes.STRING(80), defaultValue: 'Full-time' },
   gaji: { type: DataTypes.STRING(80) },
   deskripsi: { type: DataTypes.TEXT },
+  persyaratan: { type: DataTypes.TEXT },
+  kontak: { type: DataTypes.STRING(255) },
   deadline: { type: DataTypes.DATEONLY },
+  status: { type: DataTypes.ENUM('Pending', 'Approved', 'Rejected'), defaultValue: 'Approved' },
+  laporan_count: { type: DataTypes.INTEGER, defaultValue: 0 },
 }, { tableName: 'local_jobs', timestamps: true });
 
 const UmkmBusiness = sequelize.define('UmkmBusiness', {

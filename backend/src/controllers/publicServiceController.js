@@ -60,9 +60,9 @@ const seed = async () => {
   ]);
 
   await LocalJob.bulkCreate([
-    { posisi: 'Frontend Developer', perusahaan: 'Medan Digital Hub', lokasi: 'Medan Petisah', tipe: 'Full-time', gaji: 'Rp6-9 juta', deadline: '2026-08-15', deskripsi: 'Membangun dashboard web untuk layanan publik.' },
-    { posisi: 'Analis Data Kesehatan', perusahaan: 'Klinik Kota Medan', lokasi: 'Medan Timur', tipe: 'Contract', gaji: 'Rp5-7 juta', deadline: '2026-08-20', deskripsi: 'Mengolah data layanan kesehatan dan laporan bulanan.' },
-    { posisi: 'Admin Operasional UMKM', perusahaan: 'Koperasi Medan Maju', lokasi: 'Medan Kota', tipe: 'Full-time', gaji: 'Rp4-5 juta', deadline: '2026-08-30', deskripsi: 'Mengelola data anggota dan transaksi harian.' },
+    { posisi: 'Frontend Developer', perusahaan: 'Medan Digital Hub', kategori: 'Teknologi', lokasi: 'Medan Petisah', tipe: 'Full-time', gaji: 'Rp6-9 juta', deadline: '2026-08-15', deskripsi: 'Membangun dashboard web untuk layanan publik kota.', persyaratan: 'Minimal HTS/D3/S1 Informatika. Menguasai React.js & CSS.', kontak: 'hrd@medandigital.id', status: 'Approved' },
+    { posisi: 'Analis Data Kesehatan', perusahaan: 'Klinik Kota Medan', kategori: 'Kesehatan', lokasi: 'Medan Timur', tipe: 'Contract', gaji: 'Rp5-7 juta', deadline: '2026-08-20', deskripsi: 'Mengolah data layanan kesehatan dan laporan bulanan.', persyaratan: 'Lulusan Kesehatan Masyarakat atau Statistik. Teliti & jujur.', kontak: 'karir@klinikmedan.com', status: 'Approved' },
+    { posisi: 'Admin Operasional UMKM', perusahaan: 'Koperasi Medan Maju', kategori: 'UMKM', lokasi: 'Medan Kota', tipe: 'Full-time', gaji: 'Rp4-5 juta', deadline: '2026-08-30', deskripsi: 'Mengelola data anggota dan transaksi harian.', persyaratan: 'SMA/SMK Sederajat. Mahir Microsoft Office & Excel.', kontak: '0812-3456-7890 (WA)', status: 'Approved' },
   ]);
 
   await UmkmBusiness.bulkCreate([
@@ -93,7 +93,7 @@ exports.overview = async (req, res) => {
       EmergencyAlert.findAll({ order: [['aktif', 'DESC'], ['createdAt', 'DESC']] }),
       HealthStatistic.findAll({ order: [['id', 'ASC']] }),
       EducationInstitution.findAll({ order: [['jenis', 'ASC'], ['nama', 'ASC']] }),
-      LocalJob.findAll({ order: [['deadline', 'ASC']] }),
+      LocalJob.findAll({ where: { status: 'Approved' }, order: [['createdAt', 'DESC']] }),
       UmkmBusiness.findAll({ order: [['kategori', 'ASC'], ['nama', 'ASC']] }),
     ]);
     ok(res, {
@@ -102,7 +102,7 @@ exports.overview = async (req, res) => {
       alerts: uniqueBy(alerts, item => item.judul),
       health: uniqueBy(health, item => item.periode),
       education: uniqueBy(education, item => item.nama),
-      jobs: uniqueBy(jobs, item => `${item.posisi}-${item.perusahaan}`),
+      jobs,
       umkm: uniqueBy(umkm, item => item.nama),
     });
   } catch (err) { fail(res, err); }
@@ -114,5 +114,39 @@ exports.toggleAlert = async (req, res) => {
     if (!alert) return res.status(404).json({ success: false, message: 'Alert tidak ditemukan.' });
     await alert.update({ aktif: Boolean(req.body.aktif) });
     ok(res, alert);
+  } catch (err) { fail(res, err); }
+};
+
+exports.createJob = async (req, res) => {
+  try {
+    const { posisi, perusahaan, kategori, lokasi, tipe, gaji, deskripsi, persyaratan, kontak, deadline } = req.body;
+    if (!posisi || !perusahaan || !lokasi) {
+      return res.status(400).json({ success: false, message: 'Posisi, Perusahaan, dan Lokasi wajib diisi.' });
+    }
+    const job = await LocalJob.create({
+      posisi,
+      perusahaan,
+      kategori: kategori || 'Umum',
+      lokasi,
+      tipe: tipe || 'Full-time',
+      gaji: gaji || 'Kompetitif',
+      deskripsi: deskripsi || '',
+      persyaratan: persyaratan || '',
+      kontak: kontak || '-',
+      deadline: deadline || null,
+      status: 'Pending',
+    });
+    ok(res, job);
+  } catch (err) { fail(res, err); }
+};
+
+exports.reportJob = async (req, res) => {
+  try {
+    const job = await LocalJob.findByPk(req.params.id);
+    if (!job) return res.status(404).json({ success: false, message: 'Lowongan tidak ditemukan.' });
+    const newCount = (job.laporan_count || 0) + 1;
+    const newStatus = newCount >= 3 ? 'Pending' : job.status;
+    await job.update({ laporan_count: newCount, status: newStatus });
+    ok(res, { message: 'Laporan berhasil dikirim.', job });
   } catch (err) { fail(res, err); }
 };

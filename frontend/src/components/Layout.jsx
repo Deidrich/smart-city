@@ -59,9 +59,6 @@ export default function Layout({ children, title, subtitle }) {
           <button type="button" onClick={handleSignOut}>Sign Out</button>
         </div>
       </div>
-      <Link to="/" className="layout-home-link" aria-label="Homepage" title="Homepage">
-        <HeroIcon name="home" />
-      </Link>
     </>
   );
 

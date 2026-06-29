@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Auth pages
@@ -19,6 +20,8 @@ import AdminPanel from './pages/admin/AdminPanel';
 import StatusAirBersih from './pages/air/StatusAirBersih';
 import Energi from "./pages/energi/Energi";
 import Sampah from "./pages/sampah/Sampah";
+import MonitoringPage from './pages/monitoring/MonitoringPage';
+import LayananPage from './pages/layanan/LayananPage';
 import HomePage from './pages/home/HomePage';
 import BrandLogo from './components/BrandLogo';
 
@@ -51,10 +54,12 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
 
       <Route path="/dashboard" element={<ProtectedRoute><DashboardKota /></ProtectedRoute>} />
+      <Route path="/monitoring" element={<ProtectedRoute><MonitoringPage /></ProtectedRoute>} />
       <Route path="/peta" element={<ProtectedRoute><PetaInteraktif /></ProtectedRoute>} />
       <Route path="/udara" element={<ProtectedRoute><KualitasUdara /></ProtectedRoute>} />
       <Route path="/lalu-lintas" element={<ProtectedRoute><LaluLintas /></ProtectedRoute>} />
       <Route path="/transportasi" element={<ProtectedRoute><Transportasi /></ProtectedRoute>} />
+      <Route path="/layanan" element={<ProtectedRoute><LayananPage /></ProtectedRoute>} />
       <Route path="/layanan-kota" element={<ProtectedRoute><LayananKota /></ProtectedRoute>} />
       <Route path="/layanan-publik" element={<ProtectedRoute><LayananPublik /></ProtectedRoute>} />
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />
@@ -71,6 +76,28 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#111E43',
+              color: '#E3B473',
+            },
+            success: {
+              iconTheme: {
+                primary: '#E3B473',
+                secondary: '#111E43',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#111E43',
+              },
+            },
+          }}
+        />
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>

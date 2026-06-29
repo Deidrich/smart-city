@@ -9,6 +9,11 @@ import './Sidebar.css';
 
 const navGroups = [
   {
+    label: 'Beranda',
+    icon: 'home',
+    items: [{ to: '/', icon: 'home', label: 'Beranda Utama' }],
+  },
+  {
     label: 'Dashboard',
     icon: 'dashboard',
     items: [{ to: '/dashboard', icon: 'dashboard', label: 'Dashboard Kota' }],
@@ -16,23 +21,12 @@ const navGroups = [
   {
     label: 'Monitoring',
     icon: 'map',
-    items: [
-      { to: '/peta', icon: 'map', label: 'Peta Interaktif' },
-      { to: '/udara', icon: 'cloud', label: 'Kualitas Udara' },
-      { to: '/lalu-lintas', icon: 'road', label: 'Lalu Lintas' },
-      { to: '/transportasi', icon: 'truck', label: 'Transportasi' },
-      { to: '/energi', icon: 'energy', label: 'Energi' },
-      { to: '/air-bersih', icon: 'water', label: 'Air Bersih' },
-      { to: '/sampah', icon: 'trash', label: 'Sampah' },
-    ],
+    items: [{ to: '/monitoring', icon: 'map', label: 'Pusat Monitoring' }],
   },
   {
     label: 'Layanan',
     icon: 'government',
-    items: [
-      { to: '/layanan-kota', icon: 'government', label: 'Layanan Kota' },
-      { to: '/layanan-publik', icon: 'health', label: 'Layanan Publik' },
-    ],
+    items: [{ to: '/layanan', icon: 'government', label: 'Pusat Layanan' }],
   },
   {
     label: 'Akun',
@@ -52,7 +46,7 @@ export default function Sidebar({ mobileActions = null }) {
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openGroup, setOpenGroup] = useState('Monitoring');
+  const [openGroup, setOpenGroup] = useState('');
   const searchInputRef = useRef(null);
   const mobileSearchInputRef = useRef(null);
   const groups = navGroups.filter(group => !group.adminOnly || user?.role === 'admin');
@@ -94,6 +88,25 @@ export default function Sidebar({ mobileActions = null }) {
         }}
       />
     </label>
+  );
+
+  const renderSubNav = () => (
+    <nav className="dashboard-uniqlo-subnav" aria-label="Kategori navigasi utama">
+      {groups.map((group) => {
+        const targetTo = group.items[0]?.to || '#';
+        const active = isGroupActive(group);
+        return (
+          <NavLink
+            key={group.label}
+            to={targetTo}
+            className={`dashboard-uniqlo-sublink ${active ? 'active' : ''}`}
+            onClick={closeMobileMenu}
+          >
+            {group.label}
+          </NavLink>
+        );
+      })}
+    </nav>
   );
 
   const renderGroups = () => groups.map(group => (
@@ -144,41 +157,46 @@ export default function Sidebar({ mobileActions = null }) {
           <BrandLogo compact className="dashboard-nav-logo" />
         </Link>
 
-        <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
-          <Dialog.Trigger asChild>
-            <button
-              className="dashboard-nav-toggle"
-              type="button"
-              aria-label={mobileOpen ? 'Tutup menu dashboard' : 'Buka menu dashboard'}
-            >
-              <HeroIcon name={mobileOpen ? 'xMark' : 'bars'} />
-            </button>
-          </Dialog.Trigger>
-          <Dialog.Portal>
-            <Dialog.Overlay className="dashboard-mobile-overlay" />
-            <Dialog.Content className="dashboard-mobile-sheet">
-              <Dialog.Title className="dashboard-mobile-title">Menu Dashboard</Dialog.Title>
-              <Dialog.Close className="dashboard-mobile-close" aria-label="Tutup menu dashboard">
-                <HeroIcon name="xMark" />
-              </Dialog.Close>
-              <nav className={cn('dashboard-nav-menu mobile-open', searchOpen && 'searching')} aria-label="Navigasi dashboard mobile">
-                {renderSearch(mobileSearchInputRef)}
-                {renderGroups()}
-                {mobileActions && (
-                  <div className="dashboard-mobile-actions">
-                    {mobileActions}
-                  </div>
-                )}
-              </nav>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
+        <div className="dashboard-uniqlo-header-actions">
+          <div className="dashboard-mobile-inline-tools">
+            {mobileActions}
+          </div>
+
+          <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
+            <Dialog.Trigger asChild>
+              <button
+                className="dashboard-nav-toggle"
+                type="button"
+                aria-label={mobileOpen ? 'Tutup menu dashboard' : 'Buka menu dashboard'}
+              >
+                <HeroIcon name={mobileOpen ? 'xMark' : 'bars'} />
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="dashboard-mobile-overlay" />
+              <Dialog.Content className="dashboard-mobile-sheet">
+                <div className="dashboard-mobile-header">
+                  <BrandLogo compact className="dashboard-mobile-logo" />
+                  <Dialog.Title className="dashboard-mobile-title">Menu Portal</Dialog.Title>
+                  <Dialog.Close className="dashboard-mobile-close" aria-label="Tutup menu dashboard">
+                    <HeroIcon name="xMark" />
+                  </Dialog.Close>
+                </div>
+                <nav className={cn('dashboard-nav-menu mobile-open', searchOpen && 'searching')} aria-label="Navigasi dashboard mobile">
+                  {renderSearch(mobileSearchInputRef)}
+                  {renderGroups()}
+                </nav>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
 
         <nav className={cn('dashboard-nav-menu dashboard-nav-menu-desktop', searchOpen && 'searching')} aria-label="Navigasi dashboard">
           {renderSearch(searchInputRef)}
           {renderGroups()}
         </nav>
       </div>
+      {renderSubNav()}
     </header>
   );
 }

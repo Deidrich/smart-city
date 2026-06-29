@@ -52,6 +52,36 @@ const pillars = [
   'Smart Living',
 ];
 
+const hotNews = [
+  {
+    tag: '🔥 Lowongan Kerja Populer',
+    title: 'Frontend Developer - Medan Digital Hub (Gaji Rp 6-9 Juta)',
+    date: '29 Juni 2026',
+    desc: 'Posisi paling diminati warga Medan pekan ini dengan 120+ pelamar terdaftar.',
+    badge: 'Trending #1',
+    link: '/layanan',
+    icon: 'briefcase',
+  },
+  {
+    tag: '🏥 Layanan Kesehatan',
+    title: 'Kapasitas Bed RSUD Dr. Pirngadi Ditambah Realtime',
+    date: '28 Juni 2026',
+    desc: 'Sistem monitoring mencatat 42 tempat tidur baru siap melayani warga Medan.',
+    badge: 'Update Terbaru',
+    link: '/monitoring',
+    icon: 'health',
+  },
+  {
+    tag: '🌱 Lingkungan Kota',
+    title: 'Kualitas Udara Medan Tersebar Dalam Kategori Baik (80 AQI)',
+    date: '27 Juni 2026',
+    desc: 'Sensor IoT mencatat tingkat polusi di zona pusat dan petisah berada dalam batas aman.',
+    badge: 'Kondisi Baik',
+    link: '/monitoring',
+    icon: 'cloud',
+  },
+];
+
 export default function HomePage() {
   const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -176,6 +206,29 @@ export default function HomePage() {
                   <span className="service-icon"><HeroIcon name={service.icon} /></span>
                   <h3>{service.title}</h3>
                   <p>{service.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="hot-news" className="home-section hot-news-section">
+          <div className="home-container">
+            <div className="section-heading" data-reveal="fade-up">
+              <span className="hot-news-kicker">⚡ Berita & Info Hangat</span>
+              <h2>Hot News Kota Medan</h2>
+            </div>
+            <div className="hot-news-grid">
+              {hotNews.map((news, index) => (
+                <article className="hot-news-card" key={news.title} data-reveal="fade-up" style={{ '--reveal-delay': `${index * 80}ms` }}>
+                  <div className="news-card-head">
+                    <span className="news-tag">{news.tag}</span>
+                    <span className="news-badge">{news.badge}</span>
+                  </div>
+                  <h3 className="news-title">{news.title}</h3>
+                  <span className="news-date">📅 {news.date}</span>
+                  <p className="news-desc">{news.desc}</p>
+                  <Link to={news.link} className="news-link">Baca Selengkapnya →</Link>
                 </article>
               ))}
             </div>

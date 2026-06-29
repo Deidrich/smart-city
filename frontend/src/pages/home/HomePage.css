@@ -475,9 +475,105 @@
 }
 
 .service-card p {
-  color: #59647f;
+  color: #5f687c;
   font-size: 14px;
   line-height: 1.65;
+}
+
+.hot-news-section {
+  background: linear-gradient(180deg, #f7f9fe 0%, #eef4ff 100%);
+  border-top: 1px solid #edf0f7;
+  border-bottom: 1px solid #edf0f7;
+}
+
+.hot-news-kicker {
+  color: #d32f2f !important;
+  background: #ffebee !important;
+  border-color: #ffcdd2 !important;
+}
+
+.hot-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.hot-news-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid #e4e8f1;
+  border-radius: var(--home-radius-card);
+  padding: 24px;
+  box-shadow: 0 14px 36px rgba(17, 30, 67, 0.06);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.hot-news-card:hover {
+  border-color: #cddcff;
+  box-shadow: 0 22px 48px rgba(17, 30, 67, 0.12);
+  transform: translateY(-5px);
+}
+
+.news-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.news-tag {
+  color: #043cb1;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.news-badge {
+  color: #ffffff;
+  background: #111e43;
+  border-radius: var(--radius-pill);
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.news-title {
+  color: #111e43;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0 0 8px;
+}
+
+.news-date {
+  color: #8b93a7;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.news-desc {
+  color: #5f687c;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  flex-grow: 1;
+}
+
+.news-link {
+  display: inline-flex;
+  align-items: center;
+  color: #043cb1;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.news-link:hover {
+  color: #111e43;
+  transform: translateX(3px);
 }
 
 .feature-band {
@@ -706,7 +802,8 @@
     margin-left: auto;
   }
 
-  .service-grid {
+  .service-grid,
+  .hot-news-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

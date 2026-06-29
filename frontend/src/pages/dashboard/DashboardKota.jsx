@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import HeroIcon from '../../components/HeroIcon';
 import api from '../../utils/api';
@@ -51,18 +52,21 @@ export default function DashboardKota() {
   const [stats, setStats] = useState([]);
   const [summary, setSummary] = useState(null);
   const [overview, setOverview] = useState(null);
+  const [publicServices, setPublicServices] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [s, o] = await Promise.all([
+        const [s, o, ps] = await Promise.all([
           api.get('/dashboard/stats'),
           api.get('/dashboard/overview'),
+          api.get('/public-services'),
         ]);
         setStats(s.data.data.chart);
         setSummary(s.data.data.summary);
         setOverview(o.data.data);
+        setPublicServices(ps.data.data);
       } catch (e) {
         console.error(e);
       } finally {
@@ -77,6 +81,10 @@ export default function DashboardKota() {
       <div className="loading-state">Memuat data dashboard...</div>
     </Layout>
   );
+
+  const featuredJobs = publicServices?.jobs ? publicServices.jobs.slice(0, 3) : [];
+  const hospitalBeds = publicServices?.hospitals ? publicServices.hospitals.slice(0, 2) : [];
+  const activeAlert = publicServices?.alerts ? publicServices.alerts.find(a => a.aktif) : null;
 
   return (
     <Layout title="Dashboard Kota" subtitle="Statistik & Monitoring Smart City Medan">
@@ -107,6 +115,69 @@ export default function DashboardKota() {
           </div>
         </div>
       )}
+
+      {/* Featured Section */}
+      <section className="dashboard-featured-section">
+        <div className="featured-header">
+          <div>
+            <span className="featured-badge">🔥 Fitur Unggulan Kota</span>
+            <h2>Informasi & Opportunity Terbaru</h2>
+          </div>
+          <Link to="/layanan" className="featured-link">Lihat Semua Layanan →</Link>
+        </div>
+
+        <div className="featured-content-grid">
+          <div className="featured-main-card">
+            <div className="featured-subhead">
+              <h3>💼 Lowongan Kerja Terbaru</h3>
+              <span className="featured-count">{featuredJobs.length} Tersedia</span>
+            </div>
+            <div className="featured-jobs-list">
+              {featuredJobs.map((job) => (
+                <div key={job.id} className="featured-job-item">
+                  <div className="job-item-header">
+                    <span className="job-badge">{job.tipe}</span>
+                    <span className="job-salary">{job.gaji}</span>
+                  </div>
+                  <h4 className="job-title">{job.posisi}</h4>
+                  <p className="job-company">{job.perusahaan} • <span>{job.lokasi}</span></p>
+                  <Link to="/layanan" className="job-apply-btn">Lihat Detail</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="featured-side-stack">
+            {activeAlert && (
+              <div className="featured-alert-card">
+                <span className="alert-tag">🚨 Peringatan Kota</span>
+                <h4>{activeAlert.judul}</h4>
+                <p>{activeAlert.pesan}</p>
+              </div>
+            )}
+
+            <div className="featured-hospital-card">
+              <div className="hospital-card-head">
+                <h4>🏥 Status Bed Rumah Sakit</h4>
+                <Link to="/monitoring">Detail</Link>
+              </div>
+              <div className="hospital-list">
+                {hospitalBeds.map((rs) => (
+                  <div key={rs.id} className="hospital-item">
+                    <div>
+                      <strong>{rs.nama}</strong>
+                      <span>{rs.kecamatan}</span>
+                    </div>
+                    <span className={`bed-badge ${rs.status === 'Tersedia' ? 'available' : 'full'}`}>
+                      {rs.bed_tersedia} Bed {rs.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="charts-grid">
         <div className="chart-card chart-card-wide">

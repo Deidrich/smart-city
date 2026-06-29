@@ -191,6 +191,278 @@
   font-weight: 800;
 }
 
+.dashboard-featured-section {
+  margin-bottom: 26px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border: 1px solid #e4e8f1;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 16px 36px rgba(17, 30, 67, 0.05);
+}
+
+.featured-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #edf0f7;
+}
+
+.featured-badge {
+  display: inline-block;
+  color: #043cb1;
+  background: #eef4ff;
+  border: 1px solid #dce7ff;
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.featured-header h2 {
+  color: #111e43;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.featured-link {
+  color: #043cb1;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.featured-link:hover {
+  color: #111e43;
+  transform: translateX(2px);
+}
+
+.featured-content-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+}
+
+.featured-main-card {
+  background: #ffffff;
+  border: 1px solid #edf0f7;
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(17, 30, 67, 0.04);
+}
+
+.featured-subhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.featured-subhead h3 {
+  color: #111e43;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.featured-count {
+  color: #043cb1;
+  background: #eef4ff;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.featured-jobs-list {
+  display: grid;
+  gap: 12px;
+}
+
+.featured-job-item {
+  background: #f8faff;
+  border: 1px solid #e8eeec;
+  border-radius: var(--radius-control);
+  padding: 14px 16px;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-job-item:hover {
+  border-color: #cddcff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(4, 60, 177, 0.08);
+}
+
+.job-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.job-badge {
+  color: #043cb1;
+  background: #ffffff;
+  border: 1px solid #dce7ff;
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.job-salary {
+  color: #27c98b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.job-title {
+  color: #111e43;
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.job-company {
+  color: #7b8190;
+  font-size: 12px;
+  margin: 0 0 10px;
+}
+
+.job-company span {
+  color: #3d4969;
+  font-weight: 600;
+}
+
+.job-apply-btn {
+  display: inline-block;
+  color: #ffffff;
+  background: #043cb1;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.job-apply-btn:hover {
+  background: #111e43;
+}
+
+.featured-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.featured-alert-card {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 1px solid #ffcdd2;
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.alert-tag {
+  display: inline-block;
+  color: #d32f2f;
+  font-size: 11px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.featured-alert-card h4 {
+  color: #b71c1c;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.featured-alert-card p {
+  color: #5d4037;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.featured-hospital-card {
+  background: #ffffff;
+  border: 1px solid #edf0f7;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(17, 30, 67, 0.04);
+}
+
+.hospital-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hospital-card-head h4 {
+  color: #111e43;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.hospital-card-head a {
+  color: #043cb1;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.hospital-list {
+  display: grid;
+  gap: 10px;
+}
+
+.hospital-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f4f7fc;
+}
+
+.hospital-item strong {
+  display: block;
+  color: #111e43;
+  font-size: 13px;
+}
+
+.hospital-item span {
+  display: block;
+  color: #8b93a7;
+  font-size: 11px;
+}
+
+.bed-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.bed-badge.available {
+  color: #00897b;
+  background: #e0f2f1;
+}
+
+.bed-badge.full {
+  color: #e53935;
+  background: #ffebee;
+}
+
 @media (max-width: 1180px) {
   .stats-grid,
   .overview-grid {
@@ -199,6 +471,10 @@
 
   .charts-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .featured-content-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -210,11 +486,14 @@
   }
 
   .stat-card,
-  .chart-card {
+  .chart-card,
+  .dashboard-featured-section {
     padding: 18px;
   }
 
-  .chart-header {
+  .chart-header,
+  .featured-header {
     flex-direction: column;
+    align-items: flex-start;
   }
 }

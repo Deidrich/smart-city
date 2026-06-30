@@ -79,6 +79,8 @@
 
 .trf-filter-btn.active {
   color: var(--white);
+  background: var(--navy-light);
+  border-color: var(--navy-light);
   font-weight: 600;
 }
 

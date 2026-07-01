@@ -38,8 +38,12 @@ const connectMySQL = async () => {
       console.log("Tabel MySQL tersinkronisasi (alter: true)");
     } catch (alterError) {
       console.warn("Sinkronisasi dengan 'alter: true' gagal (kemungkinan karena batasan DDL database, seperti TiDB), mencoba sinkronisasi standar:", alterError.message);
-      await sequelize.sync();
-      console.log("Tabel MySQL tersinkronisasi");
+      try {
+        await sequelize.sync();
+        console.log("Tabel MySQL tersinkronisasi");
+      } catch (syncError) {
+        console.error("Sinkronisasi standar juga gagal (kemungkinan karena tabel sudah ada dan ada batasan DDL TiDB), melanjutkan jalannya server:", syncError.message);
+      }
     }
   } catch (error) {
     console.error("Gagal koneksi MySQL:", error.message);

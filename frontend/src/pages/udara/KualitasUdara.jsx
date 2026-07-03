@@ -15,10 +15,39 @@ const getAQIConfig = (aqi) => {
   return { label: 'Berbahaya', color: '#7B241C', bg: '#F9EBEA', text: '#7B241C' };
 };
 
-const AQICard = ({ data }) => {
+const getHealthRecommendations = (aqi) => {
+  if (aqi <= 50) {
+    return [
+      { icon: '😷', title: 'Masker', desc: 'Tidak Perlu' },
+      { icon: '🏠', title: 'Jendela', desc: 'Buka Jendela' },
+      { icon: '🏃‍♂️', title: 'Olahraga', desc: 'Sangat Aman' }
+    ];
+  }
+  if (aqi <= 100) {
+    return [
+      { icon: '😷', title: 'Masker', desc: 'Opsional' },
+      { icon: '🏠', title: 'Jendela', desc: 'Buka Jendela' },
+      { icon: '🏃‍♂️', title: 'Olahraga', desc: 'Aktivitas Normal' }
+    ];
+  }
+  if (aqi <= 150) {
+    return [
+      { icon: '😷', title: 'Masker', desc: 'Gunakan Masker' },
+      { icon: '🏠', title: 'Jendela', desc: 'Tutup Jendela' },
+      { icon: '🏃‍♂️', title: 'Olahraga', desc: 'Kurangi Aktivitas' }
+    ];
+  }
+  return [
+    { icon: '😷', title: 'Masker', desc: 'Wajib Masker N95' },
+    { icon: '🏠', title: 'Jendela', desc: 'Tutup Rapat' },
+    { icon: '🏃‍♂️', title: 'Olahraga', desc: 'Hindari Outdoor' }
+  ];
+};
+
+const AQICard = ({ data, isActive }) => {
   const cfg = getAQIConfig(data.aqi);
   return (
-    <div className="aqi-card" style={{ borderLeft: `4px solid ${cfg.color}` }}>
+    <div className={`aqi-card ${isActive ? 'active' : ''}`} style={{ borderLeft: `4px solid ${cfg.color}` }}>
       <div className="aqi-card-top">
         <div>
           <div className="aqi-kecamatan">{data.kecamatan}</div>
@@ -31,34 +60,35 @@ const AQICard = ({ data }) => {
       <div className="aqi-details">
         <div className="aqi-detail-item">
           <span>PM2.5</span>
-          <strong>{data.pm25} μg/m³</strong>
+          <strong>{data.pm25}</strong>
         </div>
         <div className="aqi-detail-item">
           <span>PM10</span>
-          <strong>{data.pm10} μg/m³</strong>
+          <strong>{data.pm10}</strong>
         </div>
         <div className="aqi-detail-item">
           <span>CO</span>
-          <strong>{data.co} ppm</strong>
+          <strong>{data.co}</strong>
         </div>
       </div>
     </div>
   );
 };
 
-const CustomBar = ({ x, y, width, height, aqi }) => {
-  const cfg = getAQIConfig(aqi);
-  return <rect x={x} y={y} width={width} height={height} fill={cfg.color} rx={4} />;
-};
-
 export default function KualitasUdara() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('aqi');
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     api.get('/air-quality').then(r => {
       setData(r.data.data);
+      if (r.data.data?.length > 0) {
+        // Find worst AQI to display as default hero
+        const sortedAqi = [...r.data.data].sort((a, b) => b.aqi - a.aqi);
+        setSelectedId(sortedAqi[0].id);
+      }
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -66,6 +96,8 @@ export default function KualitasUdara() {
   const sorted = [...data].sort((a, b) =>
     sortBy === 'aqi' ? b.aqi - a.aqi : a.kecamatan.localeCompare(b.kecamatan)
   );
+
+  const selectedItem = data.find(item => item.id === selectedId) || sorted[0] || null;
 
   const counts = { Baik: 0, Sedang: 0, 'Tidak Sehat': 0, 'Sangat Tidak Sehat': 0, Berbahaya: 0 };
   data.forEach(d => {
@@ -110,6 +142,92 @@ export default function KualitasUdara() {
         })}
       </div>
 
+      {/* INTERACTIVE HERO CARD */}
+      {selectedItem && (
+        <div className="aqi-hero-card">
+          <div className="aqi-hero-glow" style={{ background: getAQIConfig(selectedItem.aqi).color }} />
+          
+          {/* Radial Gauge Column */}
+          <div className="aqi-gauge-panel">
+            <div className="aqi-gauge-wrap">
+              <svg className="aqi-gauge-svg" viewBox="0 0 120 120">
+                <circle className="aqi-gauge-bg" cx="60" cy="60" r="50" />
+                <circle 
+                  className="aqi-gauge-fill" 
+                  cx="60" 
+                  cy="60" 
+                  r="50" 
+                  stroke={getAQIConfig(selectedItem.aqi).color}
+                  strokeDasharray={2 * Math.PI * 50}
+                  strokeDashoffset={2 * Math.PI * 50 - (Math.min(selectedItem.aqi, 300) / 300) * (2 * Math.PI * 50)}
+                />
+              </svg>
+              <div className="aqi-gauge-text">
+                <span className="aqi-gauge-number" style={{ color: getAQIConfig(selectedItem.aqi).color }}>{selectedItem.aqi}</span>
+                <span className="aqi-gauge-label">AQI</span>
+              </div>
+            </div>
+            <div className="aqi-gauge-kecamatan">{selectedItem.kecamatan}</div>
+            <span className="aqi-gauge-status" style={{ background: getAQIConfig(selectedItem.aqi).bg, color: getAQIConfig(selectedItem.aqi).text }}>
+              {getAQIConfig(selectedItem.aqi).label}
+            </span>
+          </div>
+
+          {/* Details & Pollutants & Recommendations Column */}
+          <div className="aqi-details-panel">
+            {/* Pollutant Bars */}
+            <div className="aqi-pollutants-section">
+              <h4>Rincian Polutan</h4>
+              <div className="aqi-bars-grid">
+                <div className="aqi-bar-item">
+                  <div className="aqi-bar-label">
+                    <span>PM2.5</span>
+                    <span>{selectedItem.pm25} μg/m³</span>
+                  </div>
+                  <div className="aqi-progress-container">
+                    <div className="aqi-progress-bar" style={{ width: `${Math.min((selectedItem.pm25 / 150) * 100, 100)}%`, background: getAQIConfig(selectedItem.aqi).color }} />
+                  </div>
+                </div>
+                <div className="aqi-bar-item">
+                  <div className="aqi-bar-label">
+                    <span>PM10</span>
+                    <span>{selectedItem.pm10} μg/m³</span>
+                  </div>
+                  <div className="aqi-progress-container">
+                    <div className="aqi-progress-bar" style={{ width: `${Math.min((selectedItem.pm10 / 150) * 100, 100)}%`, background: getAQIConfig(selectedItem.aqi).color }} />
+                  </div>
+                </div>
+                <div className="aqi-bar-item">
+                  <div className="aqi-bar-label">
+                    <span>CO</span>
+                    <span>{selectedItem.co} ppm</span>
+                  </div>
+                  <div className="aqi-progress-container">
+                    <div className="aqi-progress-bar" style={{ width: `${Math.min((selectedItem.co / 15) * 100, 100)}%`, background: getAQIConfig(selectedItem.aqi).color }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recommendations */}
+            <div className="aqi-recommendations-section">
+              <h4>Rekomendasi Aktivitas Sehat</h4>
+              <div className="aqi-recs-grid">
+                {getHealthRecommendations(selectedItem.aqi).map((rec, idx) => (
+                  <div className="aqi-rec-box" key={idx}>
+                    <span className="aqi-rec-icon">{rec.icon}</span>
+                    <div className="aqi-rec-text">
+                      <span className="aqi-rec-title">{rec.title}</span>
+                      <span className="aqi-rec-desc">{rec.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Chart */}
       <div className="chart-card" style={{ marginBottom: 24 }}>
         <div className="chart-header">
@@ -149,9 +267,13 @@ export default function KualitasUdara() {
         </ResponsiveContainer>
       </div>
 
-      {/* Grid Cards */}
+      {/* Grid Cards (Kecamatan List) */}
       <div className="aqi-grid">
-        {sorted.map(d => <AQICard key={d.id} data={d} />)}
+        {sorted.map(d => (
+          <div key={d.id} onClick={() => setSelectedId(d.id)}>
+            <AQICard data={d} isActive={selectedItem && selectedItem.id === d.id} />
+          </div>
+        ))}
       </div>
     </Layout>
   );

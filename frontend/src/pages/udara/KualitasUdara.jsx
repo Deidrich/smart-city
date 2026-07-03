@@ -44,6 +44,12 @@ const getHealthRecommendations = (aqi) => {
   ];
 };
 
+const getAQIBgImage = (aqi) => {
+  if (aqi <= 50)  return '/images/aqi-good.jpg';
+  if (aqi <= 100) return '/images/aqi-moderate.jpg';
+  return '/images/aqi-unhealthy.jpg';
+};
+
 const AQICard = ({ data, isActive }) => {
   const cfg = getAQIConfig(data.aqi);
   return (
@@ -145,6 +151,8 @@ export default function KualitasUdara() {
       {/* INTERACTIVE HERO CARD */}
       {selectedItem && (
         <div className="aqi-hero-card">
+          <div className="aqi-hero-bg-img" style={{ backgroundImage: `url(${getAQIBgImage(selectedItem.aqi)})` }} />
+          <div className="aqi-hero-bg-overlay" />
           <div className="aqi-hero-glow" style={{ background: getAQIConfig(selectedItem.aqi).color }} />
           
           {/* Radial Gauge Column */}

@@ -67,7 +67,7 @@ const login = async (req, res) => {
     const expiresIn = remember ? '30d' : process.env.JWT_EXPIRES_IN || '7d';
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, nama: user.nama },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'secret',
       { expiresIn }
     );
 
@@ -91,7 +91,8 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Gagal login.', error: error.message });
+    console.error('MANUAL LOGIN ERROR:', error);
+    res.status(500).json({ message: 'Gagal login: ' + error.message, error: error.message });
   }
 };
 
@@ -110,7 +111,7 @@ const guestLogin = async (req, res) => {
 
     const token = jwt.sign(
       { id: guestUser.id, email: guestUser.email, role: guestUser.role, nama: guestUser.nama, isGuest: true },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'secret',
       { expiresIn: '12h' }
     );
 
@@ -128,7 +129,8 @@ const guestLogin = async (req, res) => {
       user: guestUser
     });
   } catch (error) {
-    res.status(500).json({ message: 'Gagal masuk sebagai guest.', error: error.message });
+    console.error('GUEST LOGIN ERROR:', error);
+    res.status(500).json({ message: 'Gagal masuk sebagai guest: ' + error.message, error: error.message });
   }
 };
 

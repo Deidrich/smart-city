@@ -19,13 +19,14 @@ const getProfil = async (req, res) => {
 // ===== UPDATE PROFIL =====
 const updateProfil = async (req, res) => {
   try {
-    const { nama, kota } = req.body;
+    const { nama, kota, telepon } = req.body;
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ message: 'User tidak ditemukan.' });
 
     const updateData = {};
     if (nama) updateData.nama = nama;
     if (kota) updateData.kota = kota;
+    if (telepon !== undefined) updateData.telepon = telepon;
 
     // Kalau ada upload foto baru
     if (req.file) {
@@ -49,6 +50,7 @@ const updateProfil = async (req, res) => {
         nama: user.nama,
         email: user.email,
         kota: user.kota,
+        telepon: user.telepon,
         role: user.role,
         foto_profil: user.foto_profil
       }

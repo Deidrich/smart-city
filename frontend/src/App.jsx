@@ -46,12 +46,19 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
 const AppRoutes = () => {
   const { user } = useAuth();
+
+  const getLoginRedirect = () => {
+    if (!user) return '/login';
+    if (user.role === 'admin') return '/admin';
+    return '/dashboard';
+  };
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login"           element={user ? <Navigate to="/dashboard" /> : <Login />} />
-      <Route path="/register"        element={user ? <Navigate to="/dashboard" /> : <Register />} />
-      <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
+      <Route path="/login"           element={user ? <Navigate to={getLoginRedirect()} replace /> : <Login />} />
+      <Route path="/register"        element={user ? <Navigate to={getLoginRedirect()} replace /> : <Register />} />
+      <Route path="/forgot-password" element={user ? <Navigate to={getLoginRedirect()} replace /> : <ForgotPassword />} />
 
       <Route path="/dashboard" element={<ProtectedRoute><DashboardKota /></ProtectedRoute>} />
       <Route path="/monitoring" element={<ProtectedRoute><MonitoringPage /></ProtectedRoute>} />

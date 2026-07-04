@@ -66,49 +66,36 @@ const register = async (req, res) => {
 
     const existing = await User.findOne({ where: { email } });
     if (existing) {
-      if (existing.is_verified) {
-        return res.status(400).json({ message: 'Email sudah terdaftar.' });
-      }
-
-      // Fallback for existing unverified user in the db:
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const hashedAnswer = await bcrypt.hash(security_answer.toLowerCase().trim(), 10);
-
-      existing.nama = nama;
-      existing.password = hashedPassword;
-      existing.kota = kota || 'Medan';
-      existing.security_question = security_question;
-      existing.security_answer = hashedAnswer;
-      existing.verification_otp = otp;
-      existing.otp_expires_at = new Date(Date.now() + 5 * 60 * 1000);
-      await existing.save();
-
-      await sendOtpEmail(email, otp);
-
-      return res.status(200).json({ status: 'OTP_SENT', email, message: 'OTP terkirim ke email.' });
+      return res.status(400).json({ message: 'Email sudah terdaftar.' });
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedAnswer = await bcrypt.hash(security_answer.toLowerCase().trim(), 10);
 
-    // Create signed token with user information and registration details
-    const signupData = {
+    // Create verified user directly
+    const user = await User.create({
       nama,
       email,
       password: hashedPassword,
       kota: kota || 'Medan',
       security_question,
       security_answer: hashedAnswer,
-      otp
-    };
+      is_verified: true
+    });
 
-    const signupToken = jwt.sign(signupData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+    saveUserToJson(user);
 
-    await sendOtpEmail(email, otp);
+    await Log.create({
+      nama: user.nama,
+      aksi: 'REGISTER_VERIFIED',
+      detail: `Pendaftaran berhasil. Email ${user.email} telah didaftarkan langsung tanpa OTP.`
+    });
 
-    return res.status(200).json({ status: 'OTP_SENT', signupToken, email, message: 'OTP terkirim ke email.' });
+    return res.status(201).json({
+      success: true,
+      message: 'Registrasi berhasil! Silakan login.',
+      user: { id: user.id, nama: user.nama, email: user.email }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Gagal registrasi.', error: error.message });
   }
@@ -281,15 +268,9 @@ const login = async (req, res) => {
     }
 
     if (!user.is_verified) {
-      // Auto-trigger sending verification email again on login attempt
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      user.verification_otp = otp;
-      user.otp_expires_at = new Date(Date.now() + 5 * 60 * 1000);
+      user.is_verified = true;
       await user.save();
-
-      await sendOtpEmail(user.email, otp);
-
-      return res.status(400).json({ message: 'UNVERIFIED', email: user.email });
+      saveUserToJson(user);
     }
 
     const expiresIn = remember ? '30d' : process.env.JWT_EXPIRES_IN || '7d';

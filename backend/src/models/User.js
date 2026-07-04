@@ -60,6 +60,10 @@ const User = sequelize.define('User', {
   otp_expires_at: {
     type: DataTypes.DATE,
     defaultValue: null
+  },
+  poin: {
+    type: DataTypes.INTEGER,
+    defaultValue: 450
   }
 }, {
   tableName: 'users',

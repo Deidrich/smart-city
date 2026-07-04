@@ -319,6 +319,10 @@ export default function ProfileDashboard() {
                         <strong>{account?.telepon || 'Belum diisi'}</strong>
                       </div>
                       <div className="profile-detail-item">
+                        <small>Total Poin Warga</small>
+                        <strong>💰 {account?.poin !== undefined ? account.poin : 450} Poin</strong>
+                      </div>
+                      <div className="profile-detail-item">
                         <small>Kota</small>
                         <strong>{account?.kota || 'Medan'}</strong>
                       </div>

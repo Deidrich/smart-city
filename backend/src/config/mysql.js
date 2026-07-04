@@ -49,6 +49,11 @@ const connectMySQL = async () => {
         console.log("Menambahkan kolom otp_expires_at ke tabel users...");
         await sequelize.query("ALTER TABLE users ADD COLUMN otp_expires_at DATETIME DEFAULT NULL");
       }
+      const [resultsPoin] = await sequelize.query("SHOW COLUMNS FROM users LIKE 'poin'");
+      if (resultsPoin.length === 0) {
+        console.log("Menambahkan kolom poin ke tabel users...");
+        await sequelize.query("ALTER TABLE users ADD COLUMN poin INT DEFAULT 450");
+      }
     } catch (columnError) {
       console.warn("Info: Melompati penambahan kolom manual (tabel belum terbentuk atau kolom sudah ada):", columnError.message);
     }

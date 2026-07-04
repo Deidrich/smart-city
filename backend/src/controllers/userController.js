@@ -76,4 +76,69 @@ const getStatistik = async (req, res) => {
   }
 };
 
-module.exports = { getProfil, updateProfil, getStatistik };
+// ===== CLAIM VOUCHER =====
+const claimVoucher = async (req, res) => {
+  try {
+    const { voucherId } = req.body;
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User tidak ditemukan.' });
+
+    const { CityVoucher } = require('../models/PublicService');
+    const voucher = await CityVoucher.findByPk(voucherId);
+    if (!voucher) return res.status(404).json({ success: false, message: 'Voucher tidak ditemukan.' });
+
+    if (user.poin < voucher.poin_biaya) {
+      return res.status(400).json({ success: false, message: 'Poin Anda tidak mencukupi untuk mengklaim voucher ini.' });
+    }
+
+    const newPoints = user.poin - voucher.poin_biaya;
+    await user.update({ poin: newPoints });
+    saveUserToJson(user);
+
+    await Log.create({
+      userId: user.id,
+      nama: user.nama,
+      aksi: 'CLAIM_VOUCHER',
+      detail: `Klaim voucher ${voucher.nama} (${voucher.kode}) senilai ${voucher.poin_biaya} poin.`
+    });
+
+    res.json({
+      success: true,
+      message: `Voucher ${voucher.kode} berhasil diklaim!`,
+      poin: newPoints,
+      voucher
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Gagal mengklaim voucher.', error: error.message });
+  }
+};
+
+// ===== ADD POINTS (CASHBACK/ACTIVITY) =====
+const addPoints = async (req, res) => {
+  try {
+    const { amount, actionDetail } = req.body;
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User tidak ditemukan.' });
+
+    const newPoints = user.poin + Number(amount);
+    await user.update({ poin: newPoints });
+    saveUserToJson(user);
+
+    await Log.create({
+      userId: user.id,
+      nama: user.nama,
+      aksi: 'EARN_POINTS',
+      detail: actionDetail || `Mendapatkan ${amount} poin dari keaktifan/transaksi.`
+    });
+
+    res.json({
+      success: true,
+      message: `Berhasil mendapatkan ${amount} poin!`,
+      poin: newPoints
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Gagal menambah poin.', error: error.message });
+  }
+};
+
+module.exports = { getProfil, updateProfil, getStatistik, claimVoucher, addPoints };
